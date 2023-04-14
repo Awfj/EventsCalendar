@@ -1,4 +1,6 @@
-﻿namespace LR1NN
+﻿using System.Globalization;
+
+namespace LR1NN
 {
     public class Calendar
     {
@@ -27,11 +29,14 @@
         public void AddEvent(Event evnt)
         {
             events.Add(evnt);
+            SortEvents(events);
+
             Console.WriteLine("Мероприятие добавлено\n");
         }
         public void AddEvent(string name, string place, string date)
         {
             events.Add(new Event(name, place, date));
+            SortEvents(events);
             Console.WriteLine("Мероприятие добавлено\n");
         }
 
@@ -92,6 +97,21 @@
                 }
             }
             Console.WriteLine();
+        }
+
+        private static void SortEvents(List<Event> events)
+        {
+            events.Sort((x, y) =>
+            {
+                DateTime xDate = DateTime.ParseExact(x.GetDate(), "d.M", CultureInfo.InvariantCulture);
+                DateTime yDate = DateTime.ParseExact(y.GetDate(), "d.M", CultureInfo.InvariantCulture);
+                int cmp = xDate.CompareTo(yDate);
+                if (cmp == 0)
+                    cmp = string.Compare(x.GetName(), y.GetName());
+                if (cmp == 0)
+                    cmp = string.Compare(x.GetPlace(), y.GetPlace());
+                return cmp;
+            });
         }
     }
 }
