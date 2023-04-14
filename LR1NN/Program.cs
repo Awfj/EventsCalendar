@@ -101,14 +101,13 @@ do
 
                             } while (eventPlace == "");
 
-                            string datePattern = @"^(0?[1-9]|[12]\d|3[01])\.(0?[1-9]|1[012])$";
                             string eventDate;
                             bool isEventDateValid;
                             do
                             {
                                 Console.Write("Введите дату проведения в формате d.m: ");
                                 eventDate = Console.ReadLine();
-                                isEventDateValid = Regex.IsMatch(eventDate, datePattern);
+                                isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
 
                             } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
 
@@ -203,14 +202,13 @@ do
 
                 } while (eventPlace == "");
 
-                string datePattern = @"^(0?[1-9]|[12]\d|3[01])\.(0?[1-9]|1[012])$";
                 string eventDate;
                 bool isEventDateValid;
                 do
                 {
                     Console.Write("Введите новую дату проведения в формате d.m: ");
                     eventDate = Console.ReadLine();
-                    isEventDateValid = Regex.IsMatch(eventDate, datePattern);
+                    isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
 
                 } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
 
