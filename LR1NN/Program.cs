@@ -1,14 +1,9 @@
-﻿
-using LR1NN;
+﻿using LR1NN;
+using System.Text.RegularExpressions;
 
 Calendar calendar;
 int option;
 string optionRead;
-
-DateOnly w = new DateOnly();
-DateTime now = DateTime.Now;
-var d = now.Day;
-var m = now.Month;
 
 Console.WriteLine("Создание календаря");
 Console.WriteLine("1 - Конструктор по умолчанию");
@@ -89,26 +84,33 @@ do
                     case 2:
                         {
                             string eventName;
-                            string eventPlace;
-                            string eventDate;
 
                             do
                             {
                                 Console.Write("Введите название мероприятия: ");
                                 eventName = Console.ReadLine();
+
                             } while (eventName == "");
+
+                            string eventPlace;
 
                             do
                             {
                                 Console.Write("Введите место проведения: ");
                                 eventPlace = Console.ReadLine();
+
                             } while (eventPlace == "");
 
+                            string datePattern = @"^(0?[1-9]|[12]\d|3[01])\.(0?[1-9]|1[012])$";
+                            string eventDate;
+                            bool isEventDateValid;
                             do
                             {
-                                Console.Write("Введите дату проведения в формате (dd.mm): ");
+                                Console.Write("Введите дату проведения в формате d.m: ");
                                 eventDate = Console.ReadLine();
-                            } while (eventDate == "");
+                                isEventDateValid = Regex.IsMatch(eventDate, datePattern);
+
+                            } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
 
                             Console.WriteLine("\n1 - Вызов метода Event(Event evnt)");
                             Console.WriteLine("2 - Вызов метода Event(string name, " +
@@ -184,8 +186,6 @@ do
                     eventNumber > calendar.GetEventsCount());
 
                 string eventName;
-                string eventPlace;
-                string eventDate;
 
                 do
                 {
@@ -194,6 +194,8 @@ do
 
                 } while (eventName == "");
 
+                string eventPlace;
+
                 do
                 {
                     Console.Write("Введите новое место проведения: ");
@@ -201,12 +203,16 @@ do
 
                 } while (eventPlace == "");
 
+                string datePattern = @"^(0?[1-9]|[12]\d|3[01])\.(0?[1-9]|1[012])$";
+                string eventDate;
+                bool isEventDateValid;
                 do
                 {
-                    Console.Write("Введите новую дату  проведения: ");
+                    Console.Write("Введите новую дату проведения в формате d.m: ");
                     eventDate = Console.ReadLine();
+                    isEventDateValid = Regex.IsMatch(eventDate, datePattern);
 
-                } while (eventDate == "");
+                } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
 
                 calendar.EditEvent(eventNumber, eventName, eventPlace, eventDate);
                 break;
@@ -284,4 +290,3 @@ do
             }
     }
 } while (option != 0);
-

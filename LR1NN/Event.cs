@@ -9,9 +9,10 @@
         public Event()
         {
             Console.WriteLine("Вызван конструктор по умолчанию дополнительного класса");
+            DateTime now = DateTime.Now;
             name = "Unknown";
             place = "Unknown";
-            date = "31.12";
+            date = $"{now.Day}.{now.Month}";
         }
         public Event(string name, string place, string date)
         {
