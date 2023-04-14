@@ -27,6 +27,10 @@
             place = evnt.GetPlace();
             date = evnt.GetDate();
         }
+        ~Event()
+        {
+            Console.WriteLine("Вызван деструктор дополнительного класса\n");
+        }
 
         public void SetName(string name)
         {

@@ -19,6 +19,10 @@
             Console.WriteLine("Вызван конструктор копирования основного класса");
             events = calendar.events;
         }
+        ~Calendar()
+        {
+            Console.WriteLine("Вызван деструктор основного класса");
+        }
 
         public void AddEvent(Event evnt)
         {

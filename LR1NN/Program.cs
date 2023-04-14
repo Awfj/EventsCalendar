@@ -1,10 +1,49 @@
 ﻿
 using LR1NN;
 
-Calendar calendar = new Calendar();
+Calendar calendar;
 int option;
 string optionRead;
 
+DateOnly w = new DateOnly();
+DateTime now = DateTime.Now;
+var d = now.Day;
+var m = now.Month;
+
+Console.WriteLine("Создание календаря");
+Console.WriteLine("1 - Конструктор по умолчанию");
+Console.WriteLine("2 - Конструктор с параметрами");
+Console.WriteLine("3 - Конструктор копирования");
+Console.WriteLine("0 - Выйти");
+
+do
+{
+    Console.Write("Введите число из меню: ");
+    optionRead = Console.ReadLine();
+
+} while (!int.TryParse(optionRead, out option) || option < 0 || option > 3);
+
+switch (option)
+{
+    case 1:
+        {
+            calendar = new Calendar();
+            break;
+        }
+    case 2:
+        {
+            calendar = new Calendar(new List<Event>());
+            break;
+        }
+    case 3:
+        {
+            calendar = new Calendar(new Calendar());
+            break;
+        }
+    default: return;
+}
+
+Console.WriteLine("\nКалендарь мероприятий 2023");
 do
 {
     Console.WriteLine("1 - Добавление мероприятия");
@@ -13,6 +52,7 @@ do
     Console.WriteLine("4 - Поиск мероприятия");
     Console.WriteLine("5 - Просмотр мероприятий");
     Console.WriteLine("6 - Копирование мероприятия");
+    Console.WriteLine("7 - Демонстрация работы деструкторов");
     Console.WriteLine("0 - Выйти");
 
     do
@@ -20,7 +60,7 @@ do
         Console.Write("Введите число из меню: ");
         optionRead = Console.ReadLine();
 
-    } while (!int.TryParse(optionRead, out option) || option < 0 || option > 6);
+    } while (!int.TryParse(optionRead, out option) || option < 0 || option > 7);
 
     Console.Clear();
 
@@ -163,7 +203,7 @@ do
 
                 do
                 {
-                    Console.Write("Введите новую дату проведения: ");
+                    Console.Write("Введите новую дату  проведения: ");
                     eventDate = Console.ReadLine();
 
                 } while (eventDate == "");
@@ -229,5 +269,19 @@ do
                 calendar.CopyEvent(eventNumber, copyAmount);
                 break;
             }
+        case 7:
+            {
+                void CreateObjects()
+                {
+                    new Calendar();
+                    new Event();
+                };
+
+                CreateObjects();
+                GC.Collect();
+                Console.WriteLine();
+                break;
+            }
     }
 } while (option != 0);
+
