@@ -33,9 +33,35 @@ namespace LR1NN
 
             Console.WriteLine("Мероприятие добавлено\n");
         }
+        public void AddEvent(OneTimeEvent evnt)
+        {
+            events.Add(evnt);
+            SortEvents(events);
+
+            Console.WriteLine("Мероприятие добавлено\n");
+        }
+        public void AddEvent(RecurringEvent evnt)
+        {
+            events.Add(evnt);
+            SortEvents(events);
+
+            Console.WriteLine("Мероприятие добавлено\n");
+        }
         public void AddEvent(string name, string place, string date)
         {
             events.Add(new Event(name, place, date));
+            SortEvents(events);
+            Console.WriteLine("Мероприятие добавлено\n");
+        }
+        public void AddEvent(string name, string place, string date, int duration)
+        {
+            events.Add(new OneTimeEvent(name, place, date, duration));
+            SortEvents(events);
+            Console.WriteLine("Мероприятие добавлено\n");
+        }
+        public void AddEvent(string name, string place, string date, string frequency)
+        {
+            events.Add(new RecurringEvent(name, place, date, frequency));
             SortEvents(events);
             Console.WriteLine("Мероприятие добавлено\n");
         }

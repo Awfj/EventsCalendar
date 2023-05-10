@@ -1,61 +1,65 @@
 ﻿using LR1NN;
 using System.Text.RegularExpressions;
 
+List<Event> events = new List<Event>();
+List<OneTimeEvent> oneTimeEvents = new List<OneTimeEvent>();
+List<RecurringEvent> recurringEvents = new List<RecurringEvent>();
+
+Tuple<string, string, string> InputEventInfo()
+{
+    string eventName;
+
+    do
+    {
+        Console.Write("Введите название мероприятия: ");
+        eventName = Console.ReadLine();
+
+    } while (eventName == "");
+
+    string eventPlace;
+
+    do
+    {
+        Console.Write("Введите место проведения: ");
+        eventPlace = Console.ReadLine();
+
+    } while (eventPlace == "");
+
+    string eventDate;
+    bool isEventDateValid;
+    do
+    {
+        Console.Write("Введите дату проведения в формате d.m: ");
+        eventDate = Console.ReadLine();
+        isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
+
+    } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
+
+    return new Tuple<string, string, string>(eventName, eventPlace, eventDate);
+}
+
+
 Calendar calendar;
 int option;
 string optionRead;
 
-Console.WriteLine("Создание календаря");
-Console.WriteLine("1 - Конструктор по умолчанию");
-Console.WriteLine("2 - Конструктор с параметрами");
-Console.WriteLine("3 - Конструктор копирования");
-Console.WriteLine("0 - Выйти");
-
 do
 {
-    Console.Write("Введите число из меню: ");
-    optionRead = Console.ReadLine();
-
-} while (!int.TryParse(optionRead, out option) || option < 0 || option > 3);
-
-switch (option)
-{
-    case 1:
-        {
-            calendar = new Calendar();
-            break;
-        }
-    case 2:
-        {
-            calendar = new Calendar(new List<Event>());
-            break;
-        }
-    case 3:
-        {
-            calendar = new Calendar(new Calendar());
-            break;
-        }
-    default: return;
-}
-
-Console.WriteLine("\nКалендарь мероприятий 2023");
-do
-{
-    Console.WriteLine("1 - Добавление мероприятия");
-    Console.WriteLine("2 - Удаление мероприятия");
-    Console.WriteLine("3 - Редактирование мероприятия");
-    Console.WriteLine("4 - Поиск мероприятия");
-    Console.WriteLine("5 - Просмотр мероприятий");
-    Console.WriteLine("6 - Копирование мероприятия");
-    Console.WriteLine("7 - Демонстрация работы деструкторов");
-    Console.WriteLine("0 - Выйти");
+    Console.WriteLine("1 - Создание мероприятия");
+    Console.WriteLine("2 - Создание разового мероприятия");
+    Console.WriteLine("3 - Создание повторяющегося мероприятия");
+    Console.WriteLine("4 - Просмотр мероприятий");
+    Console.WriteLine("5 - Просмотр разовых мероприятий");
+    Console.WriteLine("6 - Просмотр повторяющихся мероприятий");
+    Console.WriteLine("7 - Демонстрация работы деструкторов и конструкторов копирования");
+    Console.WriteLine("0 - Выйти\n");
 
     do
     {
         Console.Write("Введите число из меню: ");
         optionRead = Console.ReadLine();
 
-    } while (!int.TryParse(optionRead, out option) || option < 0 || option > 7);
+    } while (!int.TryParse(optionRead, out option) || option < 0 || option > 9);
 
     Console.Clear();
 
@@ -78,64 +82,17 @@ do
                     case 1:
                         {
                             Event evnt = new Event();
-                            calendar.AddEvent(evnt);
+                            events.Add(evnt);
                             break;
                         }
                     case 2:
                         {
-                            string eventName;
+                            Tuple<string, string, string> info = InputEventInfo();
+                            string eventName = info.Item1;
+                            string eventPlace = info.Item2;
+                            string eventDate = info.Item3;
 
-                            do
-                            {
-                                Console.Write("Введите название мероприятия: ");
-                                eventName = Console.ReadLine();
-
-                            } while (eventName == "");
-
-                            string eventPlace;
-
-                            do
-                            {
-                                Console.Write("Введите место проведения: ");
-                                eventPlace = Console.ReadLine();
-
-                            } while (eventPlace == "");
-
-                            string eventDate;
-                            bool isEventDateValid;
-                            do
-                            {
-                                Console.Write("Введите дату проведения в формате d.m: ");
-                                eventDate = Console.ReadLine();
-                                isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
-
-                            } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
-
-                            Console.WriteLine("\n1 - Вызов метода Event(Event evnt)");
-                            Console.WriteLine("2 - Вызов метода Event(string name, " +
-                                "string place, string date)");
-
-                            do
-                            {
-                                Console.Write("Введите число из меню: ");
-                                optionRead = Console.ReadLine();
-
-                            } while (!int.TryParse(optionRead, out option) || option < 1 || option > 2);
-
-                            switch (option)
-                            {
-                                case 1:
-                                    {
-                                        calendar.AddEvent(new Event(eventName, eventPlace, eventDate));
-                                        break;
-                                    }
-                                    
-                                case 2:
-                                    {
-                                        calendar.AddEvent(eventName, eventPlace, eventDate);
-                                        break;
-                                    }   
-                            }
+                            events.Add(new Event(eventName, eventPlace, eventDate));
                             break;
                         }
                 }
@@ -143,142 +100,157 @@ do
             }
         case 2:
             {
-                if (calendar.IsEmpty())
-                {
-                    Console.WriteLine("Календарь пуст\n");
-                    break;
-                }
-
-                calendar.ShowEvents();
-                int eventNumber;
+                Console.WriteLine("1 - Конструктор по умолчанию");
+                Console.WriteLine("2 - Конструктор с параметрами");
 
                 do
                 {
-                    Console.Write("Введите номер мероприятия для удаления: ");
+                    Console.Write("Введите число из меню: ");
                     optionRead = Console.ReadLine();
 
-                } while (!int.TryParse(optionRead, out eventNumber) || 
-                    eventNumber < 1 || 
-                    eventNumber > calendar.GetEventsCount());
+                } while (!int.TryParse(optionRead, out option) || option < 1 || option > 2);
 
-                calendar.DeleteEvent(eventNumber);
+                switch (option)
+                {
+                    case 1:
+                        {
+                            OneTimeEvent evnt = new OneTimeEvent();
+                            events.Add(evnt);
+                            oneTimeEvents.Add(evnt);
+                            break;
+                        }
+                    case 2:
+                        {
+                            Tuple<string, string, string> info = InputEventInfo();
+                            string eventName = info.Item1;
+                            string eventPlace = info.Item2;
+                            string eventDate = info.Item3;
+
+                            int eventDuration;
+
+                            do
+                            {
+                                Console.Write("Введите продолжительность мероприятия в часах (до 12): ");
+                                optionRead = Console.ReadLine();
+
+                            } while (!int.TryParse(optionRead, out eventDuration) ||
+                            eventDuration < 0 ||
+                            eventDuration > 12);
+
+                            OneTimeEvent evnt = new OneTimeEvent(
+                                eventName, eventPlace, eventDate, eventDuration);
+                            events.Add(evnt);
+                            oneTimeEvents.Add(evnt);
+                            break;
+                        }
+                }
                 break;
             }
         case 3:
             {
-                if (calendar.IsEmpty())
-                {
-                    Console.WriteLine("Календарь пуст\n");
-                    break;
-                }
-
-                calendar.ShowEvents();
-                int eventNumber;
+                Console.WriteLine("1 - Конструктор по умолчанию");
+                Console.WriteLine("2 - Конструктор с параметрами");
 
                 do
                 {
-                    Console.Write("Введите номер мероприятия для удаления: ");
+                    Console.Write("Введите число из меню: ");
                     optionRead = Console.ReadLine();
 
-                } while (!int.TryParse(optionRead, out eventNumber) ||
-                    eventNumber < 1 ||
-                    eventNumber > calendar.GetEventsCount());
+                } while (!int.TryParse(optionRead, out option) || option < 1 || option > 2);
 
-                string eventName;
-
-                do
+                switch (option)
                 {
-                    Console.Write("Введите новое название мероприятия: ");
-                    eventName = Console.ReadLine();
+                    case 1:
+                        {
+                            RecurringEvent evnt = new RecurringEvent();
+                            events.Add(evnt);
+                            recurringEvents.Add(evnt);
+                            break;
+                        }
+                    case 2:
+                        {
+                            Tuple<string, string, string> info = InputEventInfo();
+                            string eventName = info.Item1;
+                            string eventPlace = info.Item2;
+                            string eventDate = info.Item3;
 
-                } while (eventName == "");
+                            string eventFrequency;
 
-                string eventPlace;
+                            do
+                            {
+                                Console.Write("Введите частоту мероприятия " +
+                                    "(день, неделя, месяц, год): ");
+                                eventFrequency = Console.ReadLine();
 
-                do
-                {
-                    Console.Write("Введите новое место проведения: ");
-                    eventPlace = Console.ReadLine();
+                            } while (
+                            eventFrequency != "день" &&
+                            eventFrequency != "неделя" &&
+                            eventFrequency != "месяц" &&
+                            eventFrequency != "год");
 
-                } while (eventPlace == "");
-
-                string eventDate;
-                bool isEventDateValid;
-                do
-                {
-                    Console.Write("Введите новую дату проведения в формате d.m: ");
-                    eventDate = Console.ReadLine();
-                    isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
-
-                } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
-
-                calendar.EditEvent(eventNumber, eventName, eventPlace, eventDate);
+                            RecurringEvent evnt = new RecurringEvent(
+                                eventName, eventPlace, eventDate, eventFrequency);
+                            events.Add(evnt);
+                            recurringEvents.Add(evnt);
+                            break;
+                        }
+                }
                 break;
             }
         case 4:
             {
-                string eventName;
-
-                do
+                if (events.Count == 0)
                 {
-                    Console.Write("Введите имя искомого мероприятия: ");
-                    eventName = Console.ReadLine();
+                    Console.WriteLine("Нет мероприятий\n");
+                    break;
+                }
 
-                } while (eventName == "");
-
-                calendar.SearchEventByName(eventName);
+                for (int i = 0; i < events.Count; i++)
+                {
+                    Console.Write($"{i + 1}: ");
+                    events[i].Show();
+                }
+                Console.WriteLine();
                 break;
             }
         case 5:
             {
-                if (calendar.IsEmpty())
+                if (oneTimeEvents.Count == 0)
                 {
-                    Console.WriteLine("Календарь пуст\n");
+                    Console.WriteLine("Нет разовых мероприятий\n");
                     break;
                 }
 
-                calendar.ShowEvents();
+                for (int i = 0; i < oneTimeEvents.Count; i++)
+                {
+                    Console.Write($"{i + 1}: ");
+                    oneTimeEvents[i].Show();
+                }
+                Console.WriteLine();
                 break;
             }
         case 6:
             {
-                if (calendar.IsEmpty())
+                if (recurringEvents.Count == 0)
                 {
-                    Console.WriteLine("Календарь пуст\n");
+                    Console.WriteLine("Нет повторяющихся мероприятий\n");
                     break;
                 }
 
-                calendar.ShowEvents();
-                int eventNumber;
-                int copyAmount;
-
-                do
+                for (int i = 0; i < recurringEvents.Count; i++)
                 {
-                    Console.Write("Введите номер мероприятия для копирования: ");
-                    optionRead = Console.ReadLine();
-
-                } while (!int.TryParse(optionRead, out eventNumber) ||
-                    eventNumber < 1 ||
-                    eventNumber > calendar.GetEventsCount());
-
-                do
-                {
-                    Console.Write("Введите количество копий (не более 10): ");
-                    optionRead = Console.ReadLine();
-
-                } while (!int.TryParse(optionRead, out copyAmount) || 
-                    copyAmount < 1 || 
-                    copyAmount > 10);
-
-                calendar.CopyEvent(eventNumber, copyAmount);
+                    Console.Write($"{i + 1}: ");
+                    recurringEvents[i].Show();
+                }
+                Console.WriteLine();
                 break;
             }
         case 7:
             {
                 void CreateObjects()
                 {
-                    new Calendar();
-                    new Event();
+                    new OneTimeEvent(new OneTimeEvent());
+                    new RecurringEvent(new RecurringEvent());
                 };
 
                 CreateObjects();
