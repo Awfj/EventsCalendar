@@ -5,41 +5,6 @@ List<Event> events = new List<Event>();
 List<OneTimeEvent> oneTimeEvents = new List<OneTimeEvent>();
 List<RecurringEvent> recurringEvents = new List<RecurringEvent>();
 
-Tuple<string, string, string> InputEventInfo()
-{
-    string eventName;
-
-    do
-    {
-        Console.Write("Введите название мероприятия: ");
-        eventName = Console.ReadLine();
-
-    } while (eventName == "");
-
-    string eventPlace;
-
-    do
-    {
-        Console.Write("Введите место проведения: ");
-        eventPlace = Console.ReadLine();
-
-    } while (eventPlace == "");
-
-    string eventDate;
-    bool isEventDateValid;
-    do
-    {
-        Console.Write("Введите дату проведения в формате d.m: ");
-        eventDate = Console.ReadLine();
-        isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
-
-    } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
-
-    return new Tuple<string, string, string>(eventName, eventPlace, eventDate);
-}
-
-
-Calendar calendar;
 int option;
 string optionRead;
 
@@ -260,3 +225,36 @@ do
             }
     }
 } while (option != 0);
+
+Tuple<string, string, string> InputEventInfo()
+{
+    string eventName;
+
+    do
+    {
+        Console.Write("Введите название мероприятия: ");
+        eventName = Console.ReadLine();
+
+    } while (eventName == "");
+
+    string eventPlace;
+
+    do
+    {
+        Console.Write("Введите место проведения: ");
+        eventPlace = Console.ReadLine();
+
+    } while (eventPlace == "");
+
+    string eventDate;
+    bool isEventDateValid;
+    do
+    {
+        Console.Write("Введите дату проведения в формате d.m: ");
+        eventDate = Console.ReadLine();
+        isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
+
+    } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
+
+    return new Tuple<string, string, string>(eventName, eventPlace, eventDate);
+}
