@@ -25,11 +25,17 @@ namespace LR1NN
         {
             if (calendar.events.Count > 0)
             {
-                Event temp = calendar.events[0];
+                Event temp = calendar[0];
                 calendar.AddEvent(temp);
             }
             return calendar;
         }
+
+        public Event this[int index]
+        {
+            get { return events[index]; }
+        }
+
 
         public Calendar(Calendar calendar)
         {
@@ -44,21 +50,16 @@ namespace LR1NN
         public void AddEvent(Event evnt)
         {
             events.Add(evnt);
-            SortEvents(events);
-
             Console.WriteLine("Мероприятие добавлено\n");
         }
         public void AddEvent(OneTimeEvent evnt)
         {
             events.Add(evnt);
-            SortEvents(events);
-
             Console.WriteLine("Мероприятие добавлено\n");
         }
         public void AddEvent(RecurringEvent evnt)
         {
             events.Add(evnt);
-            SortEvents(events);
 
             Console.WriteLine("Мероприятие добавлено\n");
         }
@@ -81,21 +82,6 @@ namespace LR1NN
                 events[i].Show();
             }
             Console.WriteLine();
-        }
-
-        private static void SortEvents(List<Event> events)
-        {
-            events.Sort((x, y) =>
-            {
-                DateTime xDate = DateTime.ParseExact(x.GetDate(), "d.M", CultureInfo.InvariantCulture);
-                DateTime yDate = DateTime.ParseExact(y.GetDate(), "d.M", CultureInfo.InvariantCulture);
-                int cmp = xDate.CompareTo(yDate);
-                if (cmp == 0)
-                    cmp = string.Compare(x.GetName(), y.GetName());
-                if (cmp == 0)
-                    cmp = string.Compare(x.GetPlace(), y.GetPlace());
-                return cmp;
-            });
         }
     }
 }

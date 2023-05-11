@@ -36,7 +36,6 @@ namespace LR1NN
         }
 
         public abstract void Show();
-        //public abstract Event Copy();
 
         public void SetName(string name)
         {

@@ -1,7 +1,9 @@
 ﻿using LR1NN;
 
-Calendar calendar = new Calendar(); ;
+RecurringEvent a = new("a", "a", "9.9", "год");
+RecurringEvent b = new("b", "a", "9.9", "год");
 
+Calendar calendar = new Calendar();
 int option;
 string optionRead;
 
@@ -112,7 +114,7 @@ do
 
                             RecurringEvent evnt = new RecurringEvent(
                                 eventName, eventPlace, eventDate, eventFrequency);
-                            calendar.AddEvent(evnt);
+                            calendar += evnt;
                             break;
                         }
                 }

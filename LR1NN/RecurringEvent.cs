@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Globalization;
+using System.Xml.Linq;
 
 namespace LR1NN
 {
@@ -30,6 +31,23 @@ namespace LR1NN
             Console.WriteLine("Вызван деструктор " +
                 "класса-наследника RecurringEvent");
         }
+
+        public static bool operator <(RecurringEvent x, RecurringEvent y)
+        {
+            int cmp = x.GetName().CompareTo(y.GetName());
+
+            return true;
+        }
+        public static bool operator >(RecurringEvent x, RecurringEvent y)
+        {
+            int cmp = x.GetName().CompareTo(y.GetName());
+
+            return true;
+        }
+        /*public static bool operator ==(RecurringEvent a, RecurringEvent b)
+        {
+            return a.GetDate() == b.GetDate();
+        }*/
 
         public void SetFrequency(string frequency)
         {
