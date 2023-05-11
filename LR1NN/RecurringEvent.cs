@@ -13,8 +13,8 @@ namespace LR1NN
                 "класса-наследника RecurringEvent");
             frequency = "неизвестно";
         }
-        public RecurringEvent(string name, string place, string date, string frequency) 
-            : base(name, place, date)
+        public RecurringEvent(string name, string place, 
+            string date, string frequency) : base(name, place, date)
         {
             Console.WriteLine("Вызван конструктор с параметрами " +
                 "класса-наследника RecurringEvent");
@@ -32,22 +32,24 @@ namespace LR1NN
                 "класса-наследника RecurringEvent");
         }
 
-        public static bool operator <(RecurringEvent x, RecurringEvent y)
+        public static bool operator <(RecurringEvent a, RecurringEvent b)
         {
-            int cmp = x.GetName().CompareTo(y.GetName());
-
-            return true;
+            int cmp = string.Compare(a.GetName(), b.GetName());
+            return cmp < 0;
         }
-        public static bool operator >(RecurringEvent x, RecurringEvent y)
+        public static bool operator >(RecurringEvent a, RecurringEvent b)
         {
-            int cmp = x.GetName().CompareTo(y.GetName());
-
-            return true;
+            int cmp = string.Compare(a.GetName(), b.GetName());
+            return cmp > 0;
         }
-        /*public static bool operator ==(RecurringEvent a, RecurringEvent b)
+        public static bool operator ==(RecurringEvent a, RecurringEvent b)
         {
-            return a.GetDate() == b.GetDate();
-        }*/
+            return a.GetName().Equals(b.GetName());
+        }
+        public static bool operator !=(RecurringEvent a, RecurringEvent b)
+        {
+            return a.GetName().Equals(b.GetName()) == false;
+        }
 
         public void SetFrequency(string frequency)
         {

@@ -1,8 +1,5 @@
 ﻿using LR1NN;
 
-RecurringEvent a = new("a", "a", "9.9", "год");
-RecurringEvent b = new("b", "a", "9.9", "год");
-
 Calendar calendar = new Calendar();
 int option;
 string optionRead;
@@ -14,6 +11,7 @@ do
     Console.WriteLine("3 - Просмотр мероприятий в календаре");
     Console.WriteLine("4 - Добавить мероприятия по умолчанию постфиксным оператором");
     Console.WriteLine("5 - Добавить мероприятия по умолчанию префиксным оператором");
+    Console.WriteLine("6 - Сравнение мероприятий по названию");
     Console.WriteLine("0 - Выйти\n");
 
     do
@@ -21,7 +19,7 @@ do
         Console.Write("Введите число из меню: ");
         optionRead = Console.ReadLine();
 
-    } while (!int.TryParse(optionRead, out option) || option < 0 || option > 5);
+    } while (!int.TryParse(optionRead, out option) || option < 0 || option > 6);
 
     Console.Clear();
 
@@ -37,7 +35,8 @@ do
                     Console.Write("Введите число из меню: ");
                     optionRead = Console.ReadLine();
 
-                } while (!int.TryParse(optionRead, out option) || option < 1 || option > 2);
+                } while (!int.TryParse(optionRead, out option) || 
+                    option < 1 || option > 2);
 
                 switch (option)
                 {
@@ -57,12 +56,12 @@ do
 
                             do
                             {
-                                Console.Write("Введите продолжительность мероприятия в часах (до 12): ");
+                                Console.Write("Введите продолжительность " +
+                                    "мероприятия в часах (до 12): ");
                                 optionRead = Console.ReadLine();
 
                             } while (!int.TryParse(optionRead, out eventDuration) ||
-                            eventDuration < 0 ||
-                            eventDuration > 12);
+                                eventDuration < 0 || eventDuration > 12);
 
                             OneTimeEvent evnt = new OneTimeEvent(
                                 eventName, eventPlace, eventDate, eventDuration);
@@ -82,7 +81,8 @@ do
                     Console.Write("Введите число из меню: ");
                     optionRead = Console.ReadLine();
 
-                } while (!int.TryParse(optionRead, out option) || option < 1 || option > 2);
+                } while (!int.TryParse(optionRead, out option) || 
+                    option < 1 || option > 2);
 
                 switch (option)
                 {
@@ -106,11 +106,10 @@ do
                                     "(день, неделя, месяц, год): ");
                                 eventFrequency = Console.ReadLine();
 
-                            } while (
-                            eventFrequency != "день" &&
-                            eventFrequency != "неделя" &&
-                            eventFrequency != "месяц" &&
-                            eventFrequency != "год");
+                            } while (eventFrequency != "день" &&
+                                     eventFrequency != "неделя" &&
+                                     eventFrequency != "месяц" &&
+                                     eventFrequency != "год");
 
                             RecurringEvent evnt = new RecurringEvent(
                                 eventName, eventPlace, eventDate, eventFrequency);
@@ -151,6 +150,65 @@ do
                 }
 
                 ++calendar;
+                break;
+            }
+        case 6:
+            {
+                if (calendar.IsEmpty())
+                {
+                    Console.WriteLine("Календарь пуст\n");
+                    break;
+                }
+
+                calendar.ShowEvents();
+
+                do
+                {
+                    Console.Write("Введите номер первого мероприятия для сравнения: ");
+                    optionRead = Console.ReadLine();
+
+                } while (!int.TryParse(optionRead, out option) || 
+                    option < 1 || option > calendar.GetEventsCount());
+
+                Event evntA = calendar[option - 1];
+
+                do
+                {
+                    Console.Write("Введите номер второго мероприятия для сравнения: ");
+                    optionRead = Console.ReadLine();
+
+                } while (!int.TryParse(optionRead, out option) ||
+                    option < 1 || option > calendar.GetEventsCount());
+
+                Event evntB = calendar[option - 1];
+                string cmpOperator;
+
+                do
+                {
+                    Console.Write("Выберите оператор сравнения (>, <, ==): ");
+                    cmpOperator = Console.ReadLine();
+
+                } while (cmpOperator != ">" && 
+                         cmpOperator != "<" && 
+                         cmpOperator != "==");
+
+                bool cmpResult;
+
+                switch (cmpOperator)
+                {
+                    case ">":
+                        cmpResult = evntA > evntB;
+                        break;
+                    case "<":
+                        cmpResult = evntA < evntB;
+                        break;
+                    default:
+                        cmpResult = evntA == evntB;
+                        break;
+                }
+
+                Console.Write($"Результат сравнения " +
+                    $"{evntA.GetName()} {cmpOperator} {evntB.GetName()}: {cmpResult}\n\n");
                 break;
             }
     }

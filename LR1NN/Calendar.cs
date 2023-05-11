@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace LR1NN
+﻿namespace LR1NN
 {
     public class Calendar
     {
