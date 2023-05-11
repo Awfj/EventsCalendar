@@ -40,7 +40,7 @@ namespace LR1NN
             return frequency;
         }
 
-        public void Show()
+        public override void Show()
         {
             Console.WriteLine($"\tНазвание мероприятия: {GetName()}");
             Console.WriteLine($"\tМесто проведения: {GetPlace()}");
