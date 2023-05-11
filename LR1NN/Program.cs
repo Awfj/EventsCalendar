@@ -1,6 +1,5 @@
 ﻿using LR1NN;
 
-List<Event> events = new List<Event>();
 Calendar calendar = new Calendar(); ;
 
 int option;
@@ -10,8 +9,9 @@ do
 {
     Console.WriteLine("1 - Создание разового мероприятия");
     Console.WriteLine("2 - Создание повторяющегося мероприятия");
-    Console.WriteLine("3 - Просмотр мероприятий в списке");
-    Console.WriteLine("4 - Просмотр мероприятий в календаре");
+    Console.WriteLine("3 - Просмотр мероприятий в календаре");
+    Console.WriteLine("4 - Добавить мероприятия по умолчанию постфиксным оператором");
+    Console.WriteLine("5 - Добавить мероприятия по умолчанию префиксным оператором");
     Console.WriteLine("0 - Выйти\n");
 
     do
@@ -19,7 +19,7 @@ do
         Console.Write("Введите число из меню: ");
         optionRead = Console.ReadLine();
 
-    } while (!int.TryParse(optionRead, out option) || option < 0 || option > 4);
+    } while (!int.TryParse(optionRead, out option) || option < 0 || option > 5);
 
     Console.Clear();
 
@@ -41,9 +41,7 @@ do
                 {
                     case 1:
                         {
-                            OneTimeEvent evnt = new OneTimeEvent();
-                            events.Add(evnt);
-                            calendar.AddEvent(evnt);
+                            calendar += new OneTimeEvent();
                             break;
                         }
                     case 2:
@@ -66,8 +64,7 @@ do
 
                             OneTimeEvent evnt = new OneTimeEvent(
                                 eventName, eventPlace, eventDate, eventDuration);
-                            events.Add(evnt);
-                            calendar.AddEvent(evnt);
+                            calendar += evnt;
                             break;
                         }
                 }
@@ -89,9 +86,7 @@ do
                 {
                     case 1:
                         {
-                            RecurringEvent evnt = new RecurringEvent();
-                            events.Add(evnt);
-                            calendar.AddEvent(evnt);
+                            calendar += new RecurringEvent();
                             break;
                         }
                     case 2:
@@ -117,7 +112,6 @@ do
 
                             RecurringEvent evnt = new RecurringEvent(
                                 eventName, eventPlace, eventDate, eventFrequency);
-                            events.Add(evnt);
                             calendar.AddEvent(evnt);
                             break;
                         }
@@ -126,18 +120,13 @@ do
             }
         case 3:
             {
-                if (events.Count == 0)
+                if (calendar.IsEmpty())
                 {
-                    Console.WriteLine("Нет мероприятий\n");
+                    Console.WriteLine("Календарь пуст\n");
                     break;
                 }
 
-                for (int i = 0; i < events.Count; i++)
-                {
-                    Console.Write($"{i + 1}: ");
-                    events[i].Show();
-                }
-                Console.WriteLine();
+                calendar.ShowEvents();
                 break;
             }
         case 4:
@@ -148,7 +137,18 @@ do
                     break;
                 }
 
-                calendar.ShowEvents();
+                calendar++;
+                break;
+            }
+        case 5:
+            {
+                if (calendar.IsEmpty())
+                {
+                    Console.WriteLine("Календарь пуст\n");
+                    break;
+                }
+
+                ++calendar;
                 break;
             }
     }
