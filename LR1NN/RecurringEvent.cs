@@ -9,27 +9,12 @@ namespace LR1NN
 
         public RecurringEvent()
         {
-            Console.WriteLine("Вызван конструктор по умолчанию " +
-                "класса-наследника RecurringEvent");
             frequency = "неизвестно";
         }
         public RecurringEvent(string name, string place, 
             string date, string frequency) : base(name, place, date)
         {
-            Console.WriteLine("Вызван конструктор с параметрами " +
-                "класса-наследника RecurringEvent");
             this.frequency = frequency;
-        }
-        public RecurringEvent(RecurringEvent evnt) : base(evnt)
-        {
-            Console.WriteLine("Вызван конструктор копирования " +
-                "класса-наследника RecurringEvent");
-            frequency = evnt.GetFrequency();
-        }
-        ~RecurringEvent()
-        {
-            Console.WriteLine("Вызван деструктор " +
-                "класса-наследника RecurringEvent");
         }
 
         public static bool operator <(RecurringEvent a, RecurringEvent b)
@@ -66,6 +51,26 @@ namespace LR1NN
             Console.WriteLine($"\tМесто проведения: {GetPlace()}");
             Console.WriteLine($"\tДата проведения: {GetDate()}");
             Console.WriteLine($"\tЧастота мероприятия: {GetFrequency()}");
+        }
+
+        public static Tuple<string, string, string, string> InputInfo()
+        {
+            Tuple<string, string, string> eventInfo = Event.InputInfo();
+            string frequency;
+
+            do
+            {
+                Console.Write("Введите частоту мероприятия " +
+                    "(день, неделя, месяц, год): ");
+                frequency = Console.ReadLine();
+
+            } while (frequency != "день" &&
+                     frequency != "неделя" &&
+                     frequency != "месяц" &&
+                     frequency != "год");
+
+            return new Tuple<string, string, string, string>
+                (eventInfo.Item1, eventInfo.Item2, eventInfo.Item3, frequency);
         }
     }
 }

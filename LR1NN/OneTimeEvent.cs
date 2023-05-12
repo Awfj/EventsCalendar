@@ -6,27 +6,12 @@
 
         public OneTimeEvent()
         {
-            Console.WriteLine("Вызван конструктор по умолчанию " +
-                "класса-наследника OneTimeEvent");
             duration = 0;
         }
         public OneTimeEvent(string name, string place, string date, int duration) 
             : base(name, place, date)
         {
-            Console.WriteLine("Вызван конструктор с параметрами " +
-                "класса-наследника OneTimeEvent");
             this.duration = duration;
-        }
-        public OneTimeEvent(OneTimeEvent evnt) : base(evnt)
-        {
-            Console.WriteLine("Вызван конструктор копирования " +
-                "класса-наследника OneTimeEvent");
-            duration = evnt.GetDuration();
-        }
-        ~OneTimeEvent()
-        {
-            Console.WriteLine("Вызван деструктор " +
-                "класса-наследника OneTimeEvent");
         }
 
         public static bool operator <(OneTimeEvent a, OneTimeEvent b)
@@ -63,6 +48,26 @@
             Console.WriteLine($"\tМесто проведения: {GetPlace()}");
             Console.WriteLine($"\tДата проведения: {GetDate()}");
             Console.WriteLine($"\tПродолжительность мероприятия (часы): {GetDuration()}");
+        }
+
+        public static Tuple<string, string, string, int> InputInfo()
+        {
+            Tuple<string, string, string> eventInfo = Event.InputInfo();
+
+            int duration;
+            string input;
+
+            do
+            {
+                Console.Write("Введите продолжительность " +
+                    "мероприятия в часах (до 12): ");
+                input = Console.ReadLine();
+
+            } while (!int.TryParse(input, out duration) ||
+                    duration < 0 || duration > 12);
+
+            return new Tuple<string, string, string, int>
+                (eventInfo.Item1, eventInfo.Item2, eventInfo.Item3, duration);
         }
     }
 }

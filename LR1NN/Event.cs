@@ -8,31 +8,12 @@ namespace LR1NN
         private string place;
         private string date;
 
-        public Event()
-        {
-            Console.WriteLine("Вызван конструктор по умолчанию базового класса");
-            DateTime now = DateTime.Now;
-            name = "неизвестно";
-            place = "неизвестно";
-            date = $"{now.Day}.{now.Month}";
-        }
+        public Event() { }
         public Event(string name, string place, string date)
         {
-            Console.WriteLine("Вызван конструктор с параметрами базового класса");
             this.name = name;
             this.place = place;
             this.date = date;
-        }
-        public Event(Event evnt)
-        {
-            Console.WriteLine("Вызван конструктор копирования базового класса");
-            name = evnt.GetName();
-            place = evnt.GetPlace();
-            date = evnt.GetDate();
-        }
-        ~Event()
-        {
-            Console.WriteLine("Вызван деструктор базового класса");
         }
 
         public static bool operator <(Event a, Event b)
@@ -103,6 +84,7 @@ namespace LR1NN
 
             string eventDate;
             bool isEventDateValid;
+
             do
             {
                 Console.Write("Введите дату проведения в формате d.m: ");
@@ -111,7 +93,8 @@ namespace LR1NN
 
             } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
 
-            return new Tuple<string, string, string>(eventName, eventPlace, eventDate);
+            return new Tuple<string, string, string>
+                (eventName, eventPlace, eventDate);
         }
     }
 }
