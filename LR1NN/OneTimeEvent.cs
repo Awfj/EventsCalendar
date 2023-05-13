@@ -43,7 +43,7 @@
             Console.WriteLine($"\tНазвание мероприятия: {GetName()}");
             Console.WriteLine($"\tМесто проведения: {GetPlace()}");
             Console.WriteLine($"\tДата проведения: {GetDate()}");
-            Console.WriteLine($"\tПродолжительность мероприятия: {GetDuration()}");
+            Console.WriteLine($"\tПродолжительность мероприятия (часы): {GetDuration()}");
         }
     }
 }
