@@ -2,7 +2,7 @@
 
 namespace LR1NN
 {
-    public class RecurringEvent : Event
+    public class RecurringEvent : Event, IEvent
     {
         private string frequency;
 
@@ -40,7 +40,7 @@ namespace LR1NN
             return frequency;
         }
 
-        public void Show()
+        public new void Show()
         {
             Console.WriteLine($"\tНазвание мероприятия: {GetName()}");
             Console.WriteLine($"\tМесто проведения: {GetPlace()}");

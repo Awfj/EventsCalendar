@@ -13,5 +13,31 @@
 
             return false;
         }
+
+        public static int InputOption(int min, int max, 
+            string message = "Введите число из меню")
+        {
+            string optionRead;
+            int option;
+
+            do
+            {
+                Console.Write($"{message}: ");
+                optionRead = Console.ReadLine();
+
+            } while (!int.TryParse(optionRead, out option) || option < min || option > max);
+
+            return option;
+        }
+
+        public static bool IsListEmpty<T>(List<T> list, string message)
+        {
+            if (list.Count == 0)
+            {
+                Console.WriteLine($"{message}\n");
+                return true;
+            }
+            return false;
+        }
     }
 }

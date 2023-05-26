@@ -1,6 +1,6 @@
 ﻿namespace LR1NN
 {
-    public class OneTimeEvent : Event
+    public class OneTimeEvent : Event, IEvent
     {
         private int duration;
 

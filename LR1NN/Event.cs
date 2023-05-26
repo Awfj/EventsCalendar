@@ -1,6 +1,8 @@
-﻿namespace LR1NN
+﻿using System.Text.RegularExpressions;
+
+namespace LR1NN
 {
-    public class Event
+    public class Event : IEvent
     {
         private string name;
         private string place;
@@ -62,6 +64,39 @@
             Console.WriteLine($"\tНазвание мероприятия: {GetName()}");
             Console.WriteLine($"\tМесто проведения: {GetPlace()}");
             Console.WriteLine($"\tДата проведения: {GetDate()}");
+        }
+
+        public static Tuple<string, string, string> InputInfo()
+        {
+            string eventName;
+
+            do
+            {
+                Console.Write("Введите название мероприятия: ");
+                eventName = Console.ReadLine();
+
+            } while (eventName == "");
+
+            string eventPlace;
+
+            do
+            {
+                Console.Write("Введите место проведения: ");
+                eventPlace = Console.ReadLine();
+
+            } while (eventPlace == "");
+
+            string eventDate;
+            bool isEventDateValid;
+            do
+            {
+                Console.Write("Введите дату проведения в формате d.m: ");
+                eventDate = Console.ReadLine();
+                isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
+
+            } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
+
+            return new Tuple<string, string, string>(eventName, eventPlace, eventDate);
         }
     }
 }

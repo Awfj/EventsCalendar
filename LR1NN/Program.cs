@@ -1,47 +1,21 @@
 ﻿using LR1NN;
-using System.Text.RegularExpressions;
 
 List<Event> events = new List<Event>();
 List<OneTimeEvent> oneTimeEvents = new List<OneTimeEvent>();
 List<RecurringEvent> recurringEvents = new List<RecurringEvent>();
 
 int option;
-string optionRead;
 
 do
 {
-    Console.WriteLine("1 - Создание мероприятия");
-    Console.WriteLine("2 - Создание разового мероприятия");
-    Console.WriteLine("3 - Создание повторяющегося мероприятия");
-    Console.WriteLine("4 - Просмотр мероприятий");
-    Console.WriteLine("5 - Просмотр разовых мероприятий");
-    Console.WriteLine("6 - Просмотр повторяющихся мероприятий");
-    Console.WriteLine("7 - Демонстрация работы деструкторов и конструкторов копирования");
-    Console.WriteLine("0 - Выйти\n");
-
-    do
-    {
-        Console.Write("Введите число из меню: ");
-        optionRead = Console.ReadLine();
-
-    } while (!int.TryParse(optionRead, out option) || option < 0 || option > 9);
-
+    option = Misc.ShowMainMenu();
     Console.Clear();
 
     switch (option)
     {
         case 1:
             {
-                Console.WriteLine("1 - Конструктор по умолчанию");
-                Console.WriteLine("2 - Конструктор с параметрами");
-
-                do
-                {
-                    Console.Write("Введите число из меню: ");
-                    optionRead = Console.ReadLine();
-
-                } while (!int.TryParse(optionRead, out option) || option < 1 || option > 2);
-
+                option = Misc.ShowConstructorMenu();
                 switch (option)
                 {
                     case 1:
@@ -52,12 +26,19 @@ do
                         }
                     case 2:
                         {
-                            Tuple<string, string, string> info = InputEventInfo();
-                            string eventName = info.Item1;
-                            string eventPlace = info.Item2;
-                            string eventDate = info.Item3;
+                            Tuple<string, string, string> info = Event.InputInfo();
+                            events.Add(new Event(info.Item1, info.Item2, info.Item3));
+                            break;
+                        }
+                    case 3:
+                        {
+                            if (Validator.IsListEmpty(events, "Нет мероприятий"))
+                            {
+                                break;
+                            }
 
-                            events.Add(new Event(eventName, eventPlace, eventDate));
+                            Event evnt = new Event(Misc.FindEventToCopy(events));
+                            events.Add(evnt);
                             break;
                         }
                 }
@@ -65,16 +46,7 @@ do
             }
         case 2:
             {
-                Console.WriteLine("1 - Конструктор по умолчанию");
-                Console.WriteLine("2 - Конструктор с параметрами");
-
-                do
-                {
-                    Console.Write("Введите число из меню: ");
-                    optionRead = Console.ReadLine();
-
-                } while (!int.TryParse(optionRead, out option) || option < 1 || option > 2);
-
+                option = Misc.ShowConstructorMenu();
                 switch (option)
                 {
                     case 1:
@@ -86,25 +58,25 @@ do
                         }
                     case 2:
                         {
-                            Tuple<string, string, string> info = InputEventInfo();
-                            string eventName = info.Item1;
-                            string eventPlace = info.Item2;
-                            string eventDate = info.Item3;
-
-                            int eventDuration;
-
-                            do
-                            {
-                                Console.Write("Введите продолжительность мероприятия в часах (до 12): ");
-                                optionRead = Console.ReadLine();
-
-                            } while (!int.TryParse(optionRead, out eventDuration) ||
-                            eventDuration < 0 ||
-                            eventDuration > 12);
+                            Tuple<string, string, string> info = Event.InputInfo();
+                            int eventDuration = Validator.InputOption(0, 12, 
+                                "Введите продолжительность мероприятия в часах (до 12)");
 
                             OneTimeEvent evnt = new OneTimeEvent(
-                                eventName, eventPlace, eventDate, eventDuration);
+                                info.Item1, info.Item2, info.Item3, eventDuration);
                             events.Add(evnt);
+                            oneTimeEvents.Add(evnt);
+                            break;
+                        }
+                    case 3:
+                        {
+                            if (Validator.IsListEmpty(oneTimeEvents, "Нет разовых мероприятий"))
+                            {
+                                break;
+                            }
+
+                            OneTimeEvent evnt = new OneTimeEvent(
+                                Misc.FindEventToCopy(oneTimeEvents));
                             oneTimeEvents.Add(evnt);
                             break;
                         }
@@ -115,13 +87,7 @@ do
             {
                 Console.WriteLine("1 - Конструктор по умолчанию");
                 Console.WriteLine("2 - Конструктор с параметрами");
-
-                do
-                {
-                    Console.Write("Введите число из меню: ");
-                    optionRead = Console.ReadLine();
-
-                } while (!int.TryParse(optionRead, out option) || option < 1 || option > 2);
+                option = Validator.InputOption(1, 2);
 
                 switch (option)
                 {
@@ -134,11 +100,7 @@ do
                         }
                     case 2:
                         {
-                            Tuple<string, string, string> info = InputEventInfo();
-                            string eventName = info.Item1;
-                            string eventPlace = info.Item2;
-                            string eventDate = info.Item3;
-
+                            Tuple<string, string, string> info = Event.InputInfo();
                             string eventFrequency;
 
                             do
@@ -154,8 +116,20 @@ do
                             eventFrequency != "год");
 
                             RecurringEvent evnt = new RecurringEvent(
-                                eventName, eventPlace, eventDate, eventFrequency);
+                                info.Item1, info.Item2, info.Item3, eventFrequency);
                             events.Add(evnt);
+                            recurringEvents.Add(evnt);
+                            break;
+                        }
+                    case 3:
+                        {
+                            if (Validator.IsListEmpty(recurringEvents, "Нет повторяющихся мероприятий"))
+                            {
+                                break;
+                            }
+
+                            RecurringEvent evnt = new RecurringEvent(
+                                Misc.FindEventToCopy(recurringEvents));
                             recurringEvents.Add(evnt);
                             break;
                         }
@@ -164,50 +138,35 @@ do
             }
         case 4:
             {
-                if (events.Count == 0)
+                if (Validator.IsListEmpty(events,
+                    "Нет мероприятий"))
                 {
-                    Console.WriteLine("Нет мероприятий\n");
                     break;
                 }
 
-                for (int i = 0; i < events.Count; i++)
-                {
-                    Console.Write($"{i + 1}: ");
-                    events[i].Show();
-                }
-                Console.WriteLine();
+                Misc.PrintEvents(events);
                 break;
             }
         case 5:
             {
-                if (oneTimeEvents.Count == 0)
+                if (Validator.IsListEmpty(oneTimeEvents,
+                    "Нет разовых мероприятий"))
                 {
-                    Console.WriteLine("Нет разовых мероприятий\n");
                     break;
                 }
 
-                for (int i = 0; i < oneTimeEvents.Count; i++)
-                {
-                    Console.Write($"{i + 1}: ");
-                    oneTimeEvents[i].Show();
-                }
-                Console.WriteLine();
+                Misc.PrintEvents(oneTimeEvents);
                 break;
             }
         case 6:
             {
-                if (recurringEvents.Count == 0)
+                if (Validator.IsListEmpty(recurringEvents, 
+                    "Нет повторяющихся мероприятий")) 
                 {
-                    Console.WriteLine("Нет повторяющихся мероприятий\n");
                     break;
                 }
 
-                for (int i = 0; i < recurringEvents.Count; i++)
-                {
-                    Console.Write($"{i + 1}: ");
-                    recurringEvents[i].Show();
-                }
-                Console.WriteLine();
+                Misc.PrintEvents(recurringEvents);
                 break;
             }
         case 7:
@@ -225,36 +184,3 @@ do
             }
     }
 } while (option != 0);
-
-Tuple<string, string, string> InputEventInfo()
-{
-    string eventName;
-
-    do
-    {
-        Console.Write("Введите название мероприятия: ");
-        eventName = Console.ReadLine();
-
-    } while (eventName == "");
-
-    string eventPlace;
-
-    do
-    {
-        Console.Write("Введите место проведения: ");
-        eventPlace = Console.ReadLine();
-
-    } while (eventPlace == "");
-
-    string eventDate;
-    bool isEventDateValid;
-    do
-    {
-        Console.Write("Введите дату проведения в формате d.m: ");
-        eventDate = Console.ReadLine();
-        isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
-
-    } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
-
-    return new Tuple<string, string, string>(eventName, eventPlace, eventDate);
-}
