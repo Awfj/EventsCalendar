@@ -6,18 +6,17 @@ namespace LR1NN
     {
         public static int ShowMainMenu()
         {
-            Console.WriteLine("1 - Создание мероприятия");
-            Console.WriteLine("2 - Создание разового мероприятия");
-            Console.WriteLine("3 - Создание повторяющегося мероприятия");
-            Console.WriteLine("4 - Удаление мероприятия");
-            Console.WriteLine("5 - Редактирование мероприятия");
-            Console.WriteLine("6 - Поиск мероприятия");
-            Console.WriteLine("7 - Копирование мероприятия");
-            Console.WriteLine("8 - Просмотр мероприятий");
-            Console.WriteLine("9 - Демонстрация деструкторов");
+            Console.WriteLine("1 - Создание разового мероприятия");
+            Console.WriteLine("2 - Создание повторяющегося мероприятия");
+            Console.WriteLine("3 - Удаление мероприятия");
+            Console.WriteLine("4 - Редактирование мероприятия");
+            Console.WriteLine("5 - Поиск мероприятия");
+            Console.WriteLine("6 - Копирование мероприятия");
+            Console.WriteLine("7 - Просмотр мероприятий");
+            Console.WriteLine("8 - Демонстрация деструкторов");
             Console.WriteLine("0 - Выйти\n");
 
-            return Validator.InputOption(0, 9);
+            return Validator.InputOption(0, 8);
         }
 
         public static int ShowCalendarMenu()
@@ -96,34 +95,6 @@ namespace LR1NN
             }
         }
 
-        public static void AddEvent(ref Calendar calendar)
-        {
-            int option = ShowConstructorMenu();
-            switch (option)
-            {
-                case 1:
-                    {
-                        Event evnt = new Event();
-                        calendar.AddEvent(evnt);
-                        break;
-                    }
-                case 2:
-                    {
-                        Tuple<string, string, string> info = InputEventInfo();
-                        calendar.AddEvent(new Event(info.Item1, info.Item2, info.Item3));
-                        break;
-                    }
-                case 3:
-                    {
-                        if (calendar.IsEmpty()) break;
-
-                        IEvent foundEvnt = FindEventToCopy(calendar);
-                        calendar.AddEvent(new Event((Event)foundEvnt));
-                        break;
-                    }
-            }
-        }
-
         public static void AddOneTimeEvent(ref Calendar calendar)
         {
             int option = ShowConstructorMenu();
@@ -150,14 +121,13 @@ namespace LR1NN
                         if (calendar.IsEmpty()) break;
 
                         IEvent foundEvnt = FindEventToCopy(calendar);
-                        if (foundEvnt is not OneTimeEvent)
+                        if (foundEvnt is OneTimeEvent oneTimeEvent)
                         {
-                            Event evnt = new Event((Event)foundEvnt);
-                            calendar.AddEvent(new OneTimeEvent(evnt));
-                        }
+                            calendar.AddEvent(new OneTimeEvent(oneTimeEvent));
+                        } 
                         else
                         {
-                            calendar.AddEvent(new OneTimeEvent((OneTimeEvent)foundEvnt));
+                            calendar.AddEvent(new OneTimeEvent((Event)foundEvnt));
                         }
                         break;
                     }
@@ -190,14 +160,13 @@ namespace LR1NN
                         if (calendar.IsEmpty()) break;
 
                         IEvent foundEvnt = FindEventToCopy(calendar);
-                        if (foundEvnt is not RecurringEvent)
+                        if (foundEvnt is RecurringEvent recurringEvent)
                         {
-                            Event evnt = new Event((Event)foundEvnt);
-                            calendar.AddEvent(new RecurringEvent(evnt));
+                            calendar.AddEvent(new RecurringEvent(recurringEvent));
                         }
                         else
                         {
-                            calendar.AddEvent(new RecurringEvent((RecurringEvent)foundEvnt));
+                            calendar.AddEvent(new RecurringEvent((Event)foundEvnt));
                         }
                         break;
                     }

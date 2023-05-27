@@ -14,30 +14,27 @@ do
     switch (option)
     {
         case 1:
-            Misc.AddEvent(ref calendar);
-            break;
-        case 2:
             Misc.AddOneTimeEvent(ref calendar);
             break;
-        case 3:
+        case 2:
             Misc.AddRecurringEvent(ref calendar);
             break;
-        case 4:
+        case 3:
             calendar.DeleteEvent();
             break;
-        case 5:
+        case 4:
             calendar.EditEvent();
             break;
-        case 6:
+        case 5:
             calendar.SearchEventByName();
             break;
-        case 7:
+        case 6:
             calendar.CopyEvent();
             break;
-        case 8:
+        case 7:
             calendar.PrintEvents();
             break;
-        case 9:
+        case 8:
             Misc.DemonstrateDestructors();
             break;
     }

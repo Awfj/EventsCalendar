@@ -89,13 +89,9 @@ namespace LR1NN
             {
                 copiedEvent = new OneTimeEvent(oneTimeEvent);
             }
-            else if (foundEvent is RecurringEvent recurringEvent)
-            {
-                copiedEvent = new RecurringEvent(recurringEvent);
-            }
             else
             {
-                copiedEvent = new Event((Event)foundEvent);
+                copiedEvent = new RecurringEvent((RecurringEvent)foundEvent);
             }
 
             for (int i = 0; i < copiesAmount; i++)
