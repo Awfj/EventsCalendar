@@ -9,13 +9,13 @@
             Console.WriteLine("3 - Создание повторяющегося мероприятия");
             Console.WriteLine("4 - Удаление мероприятия");
             Console.WriteLine("5 - Редактирование мероприятия");
-            Console.WriteLine("6 - Просмотр мероприятий");
-            Console.WriteLine("5 - Просмотр разовых мероприятий");
-            Console.WriteLine("6 - Просмотр повторяющихся мероприятий");
-            Console.WriteLine("7 - Демонстрация работы деструкторов и конструкторов копирования");
+            Console.WriteLine("6 - Поиск мероприятия");
+            Console.WriteLine("7 - Копирование мероприятия");
+            Console.WriteLine("8 - Просмотр мероприятий");
+            Console.WriteLine("9 - Демонстрация работы деструкторов и конструкторов копирования");
             Console.WriteLine("0 - Выйти\n");
 
-            return Validator.InputOption(0, 7);
+            return Validator.InputOption(0, 9);
         }
 
         public static int ShowCalendarMenu()
@@ -78,28 +78,156 @@
             return eventFrequency;
         }
 
-        /*public static T FindEventToCopy<T>(List<T> list) where T : IEvent
-        {
-            PrintEvents(list);
-            int index = Validator.InputOption(0, list.Count - 1,
-                "Введите индекс элемента для копирования");
-
-            return list[index];
-        }*/
-
         public static IEvent FindEventToCopy(Calendar calendar)
         {
-            if (calendar.IsEmpty())
-            {
-                Console.WriteLine("Нет мероприятий\n");
-                throw new Exception();
-            }
-            
             calendar.PrintEvents();
             int index = Validator.InputOption(1, calendar.GetEventsCount(),
                 "Введите номер элемента для копирования") - 1;
 
             return calendar[index];
+        }
+
+        public static void InitCalendar(out Calendar calendar)
+        {
+            int option = ShowCalendarMenu();
+
+            switch (option)
+            {
+                case 2:
+                    {
+                        calendar = new Calendar(new List<IEvent>());
+                        break;
+                    }
+                case 3:
+                    {
+                        calendar = new Calendar(new Calendar());
+                        break;
+                    }
+                default:
+                    calendar = new Calendar();
+                    break;
+            }
+        }
+
+        public static void AddEvent(ref Calendar calendar)
+        {
+            int option = ShowConstructorMenu();
+            switch (option)
+            {
+                case 1:
+                    {
+                        Event evnt = new Event();
+                        calendar.AddEvent(evnt);
+                        break;
+                    }
+                case 2:
+                    {
+                        Tuple<string, string, string> info = Event.InputInfo();
+                        calendar.AddEvent(new Event(info.Item1, info.Item2, info.Item3));
+                        break;
+                    }
+                case 3:
+                    {
+                        if (calendar.IsEmpty()) break;
+
+                        IEvent foundEvnt = FindEventToCopy(calendar);
+                        calendar.AddEvent(new Event((Event)foundEvnt));
+                        break;
+                    }
+            }
+        }
+
+        public static void AddOneTimeEvent(ref Calendar calendar)
+        {
+            int option = ShowConstructorMenu();
+            switch (option)
+            {
+                case 1:
+                    {
+                        OneTimeEvent evnt = new OneTimeEvent();
+                        calendar.AddEvent(evnt);
+                        break;
+                    }
+                case 2:
+                    {
+                        Tuple<string, string, string> info = Event.InputInfo();
+                        int eventDuration = InputDuration();
+
+                        OneTimeEvent evnt = new OneTimeEvent(
+                            info.Item1, info.Item2, info.Item3, eventDuration);
+                        calendar.AddEvent(evnt);
+                        break;
+                    }
+                case 3:
+                    {
+                        if (calendar.IsEmpty()) break;
+
+                        IEvent foundEvnt = FindEventToCopy(calendar);
+                        if (foundEvnt is not OneTimeEvent)
+                        {
+                            Event evnt = new Event((Event)foundEvnt);
+                            calendar.AddEvent(new OneTimeEvent(evnt));
+                        }
+                        else
+                        {
+                            calendar.AddEvent(new OneTimeEvent((OneTimeEvent)foundEvnt));
+                        }
+                        break;
+                    }
+            }
+        }
+
+        public static void AddRecurringEvent(ref Calendar calendar)
+        {
+            int option = ShowConstructorMenu();
+            switch (option)
+            {
+                case 1:
+                    {
+                        RecurringEvent evnt = new RecurringEvent();
+                        calendar.AddEvent(evnt);
+                        break;
+                    }
+                case 2:
+                    {
+                        Tuple<string, string, string> info = Event.InputInfo();
+                        string eventFrequency = InputFrequency();
+
+                        RecurringEvent evnt = new RecurringEvent(
+                            info.Item1, info.Item2, info.Item3, eventFrequency);
+                        calendar.AddEvent(evnt);
+                        break;
+                    }
+                case 3:
+                    {
+                        if (calendar.IsEmpty()) break;
+
+                        IEvent foundEvnt = FindEventToCopy(calendar);
+                        if (foundEvnt is not RecurringEvent)
+                        {
+                            Event evnt = new Event((Event)foundEvnt);
+                            calendar.AddEvent(new RecurringEvent(evnt));
+                        }
+                        else
+                        {
+                            calendar.AddEvent(new RecurringEvent((RecurringEvent)foundEvnt));
+                        }
+                        break;
+                    }
+            }
+        }
+
+        public static void DemonstrateDestructors()
+        {
+            void CreateObjects()
+            {
+                new OneTimeEvent(new OneTimeEvent());
+                new RecurringEvent(new RecurringEvent());
+            };
+
+            CreateObjects();
+            GC.Collect();
+            Console.WriteLine();
         }
     }
 }

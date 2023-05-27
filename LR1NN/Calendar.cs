@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Xml.Linq;
 
 namespace LR1NN
 {
@@ -35,32 +34,9 @@ namespace LR1NN
             Console.WriteLine("Мероприятие добавлено\n");
         }
 
-        public void AddEvent(string name, string place, string date)
-        {
-            events.Add(new Event(name, place, date));
-            SortEvents(events);
-            Console.WriteLine("Мероприятие добавлено\n");
-        }
-        public void AddEvent(string name, string place, string date, int duration)
-        {
-            events.Add(new OneTimeEvent(name, place, date, duration));
-            SortEvents(events);
-            Console.WriteLine("Мероприятие добавлено\n");
-        }
-        public void AddEvent(string name, string place, string date, string frequency)
-        {
-            events.Add(new RecurringEvent(name, place, date, frequency));
-            SortEvents(events);
-            Console.WriteLine("Мероприятие добавлено\n");
-        }
-
         public void EditEvent()
         {
-            if (IsEmpty())
-            {
-                Console.WriteLine("Календарь пуст\n");
-                return;
-            }
+            if (IsEmpty()) return;
 
             PrintEvents();
             int eventNumber = Validator.InputOption(1, GetEventsCount(),
@@ -87,11 +63,7 @@ namespace LR1NN
 
         public void DeleteEvent()
         {
-            if (GetEventsCount() == 0)
-            {
-                Console.WriteLine("Календарь пуст\n");
-                return;
-            }
+            if (IsEmpty()) return;
 
             PrintEvents();
             int eventNumber = Validator.InputOption(1, GetEventsCount(),
@@ -101,21 +73,52 @@ namespace LR1NN
             Console.WriteLine("Мероприятие удалено\n");
         }
 
-        public void CopyEvent(int eventNumber, int count)
+        public void CopyEvent()
         {
-            //Event evnt = new Event((Event)events[eventNumber - 1]);
+            if (IsEmpty()) return;
 
-            for (int i = 0; i < count; i++)
+            PrintEvents();
+            int eventNumber = Validator.InputOption(1, GetEventsCount(),
+                "Введите номер мероприятия для копирования");
+            int copiesAmount = Validator.InputOption(1, 10,
+                "Введите количество копий (не более 10)"); ;
+
+            IEvent foundEvent = events[eventNumber - 1];
+            IEvent copiedEvent;
+
+            if (foundEvent is OneTimeEvent oneTimeEvent)
             {
-                //events.Add(new Event(evnt));
-                events.Add(events[eventNumber - 1]);
+                copiedEvent = new OneTimeEvent(oneTimeEvent);
             }
+            else if (foundEvent is RecurringEvent recurringEvent)
+            {
+                copiedEvent = new RecurringEvent(recurringEvent);
+            }
+            else
+            {
+                copiedEvent = new Event((Event)foundEvent);
+            }
+
+            for (int i = 0; i < copiesAmount; i++)
+            {
+                events.Add(copiedEvent);
+            }
+
+            SortEvents(events);
             Console.WriteLine("Мероприятие скопировано\n");
         }
 
-        public bool IsEmpty()
+        public bool IsEmpty(bool showMessage = true)
         {
-            return (events.Count == 0);
+            if (GetEventsCount() == 0)
+            {
+                if (showMessage)
+                {
+                    Console.WriteLine("Календарь пуст\n");
+                }
+                return true;
+            }
+            return false;
         }
 
         public int GetEventsCount()
@@ -125,11 +128,7 @@ namespace LR1NN
 
         public void PrintEvents()
         {
-            if (GetEventsCount() == 0)
-            {
-                Console.WriteLine("Календарь пуст\n");
-                return;
-            }
+            if (IsEmpty()) return;
 
             for (int i = 0; i < events.Count; i++)
             {
@@ -139,15 +138,37 @@ namespace LR1NN
             Console.WriteLine();
         }
 
-        public void SearchEventByName(string name)
+        public void SearchEventByName()
         {
+            if (IsEmpty()) return;
+
+            PrintEvents();
+            string eventName;
+            do
+            {
+                Console.Write("Введите имя искомого мероприятия: ");
+                eventName = Console.ReadLine();
+
+            } while (eventName == "");
+
+            bool found = false;
             for (int i = 0; i < events.Count; i++)
             {
-                if (events[i].GetName() == name)
+                if (events[i].GetName() == eventName)
                 {
+                    if (!found)
+                    {
+                        Console.WriteLine("Найденные мероприятия:");
+                        found = true;
+                    }
                     Console.Write($"{i + 1}: ");
                     events[i].Show();
                 }
+            }
+
+            if (!found)
+            {
+                Console.WriteLine("Мероприятия с таким именем не найдены");
             }
             Console.WriteLine();
         }

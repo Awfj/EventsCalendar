@@ -1,6 +1,6 @@
 ﻿namespace LR1NN
 {
-    public class RecurringEvent : Event, IEvent
+    public class RecurringEvent : Event, IRecurringEvent
     {
         private string frequency;
 
