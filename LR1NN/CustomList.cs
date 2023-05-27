@@ -47,7 +47,6 @@
             return list.Max();
         }
 
-        // Сортировка по номеру договора
         public void Sort()
         {
             list.Sort();
