@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace LR1NN
+﻿namespace LR1NN
 {
     public class RecurringEvent : Event, IEvent
     {
@@ -18,6 +16,12 @@ namespace LR1NN
             Console.WriteLine("Вызван конструктор с параметрами " +
                 "класса-наследника RecurringEvent");
             this.frequency = frequency;
+        }
+        public RecurringEvent(Event evnt) : base(evnt)
+        {
+            Console.WriteLine("Вызван конструктор копирования " +
+                "класса-наследника RecurringEvent");
+            frequency = "неизвестно";
         }
         public RecurringEvent(RecurringEvent evnt) : base(evnt)
         {

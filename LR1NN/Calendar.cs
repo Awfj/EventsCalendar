@@ -1,16 +1,17 @@
 ﻿using System.Globalization;
+using System.Xml.Linq;
 
 namespace LR1NN
 {
     public class Calendar
     {
-        private List<Event> events = new List<Event>();
+        private List<IEvent> events = new List<IEvent>();
 
         public Calendar()
         {
             Console.WriteLine("Вызван конструктор по умолчанию основного класса");
         }
-        public Calendar(List<Event> events)
+        public Calendar(List<IEvent> events)
         {
             Console.WriteLine("Вызван конструктор с параметрами основного класса");
             this.events = events;
@@ -26,27 +27,14 @@ namespace LR1NN
             Console.WriteLine("Вызван деструктор основного класса");
         }
 
-        public void AddEvent(Event evnt)
+        public void AddEvent(IEvent evnt)
         {
             events.Add(evnt);
             SortEvents(events);
 
             Console.WriteLine("Мероприятие добавлено\n");
         }
-        public void AddEvent(OneTimeEvent evnt)
-        {
-            events.Add(evnt);
-            SortEvents(events);
 
-            Console.WriteLine("Мероприятие добавлено\n");
-        }
-        public void AddEvent(RecurringEvent evnt)
-        {
-            events.Add(evnt);
-            SortEvents(events);
-
-            Console.WriteLine("Мероприятие добавлено\n");
-        }
         public void AddEvent(string name, string place, string date)
         {
             events.Add(new Event(name, place, date));
@@ -66,28 +54,61 @@ namespace LR1NN
             Console.WriteLine("Мероприятие добавлено\n");
         }
 
-        public void EditEvent(int eventNumber, string name, string place, string date)
+        public void EditEvent()
         {
-            Event evnt = events[eventNumber - 1];
-            evnt.SetName(name);
-            evnt.SetPlace(place);
-            evnt.SetDate(date);
+            if (IsEmpty())
+            {
+                Console.WriteLine("Календарь пуст\n");
+                return;
+            }
+
+            PrintEvents();
+            int eventNumber = Validator.InputOption(1, GetEventsCount(),
+                "Введите номер мероприятия для редактирования");
+
+            IEvent evnt = events[eventNumber - 1];
+            Tuple<string, string, string> info = Event.InputInfo();
+
+            evnt.SetName(info.Item1);
+            evnt.SetPlace(info.Item2);
+            evnt.SetDate(info.Item3);
+
+            if (evnt is OneTimeEvent oneTimeEvent)
+            {
+                oneTimeEvent.SetDuration(Misc.InputDuration());
+            } 
+            else if (evnt is RecurringEvent recurringEvent)
+            {
+                recurringEvent.SetFrequency(Misc.InputFrequency());
+            }
+
             Console.WriteLine("Мероприятие изменено\n");
         }
 
-        public void DeleteEvent(int eventNumber)
+        public void DeleteEvent()
         {
+            if (GetEventsCount() == 0)
+            {
+                Console.WriteLine("Календарь пуст\n");
+                return;
+            }
+
+            PrintEvents();
+            int eventNumber = Validator.InputOption(1, GetEventsCount(),
+                "Введите номер мероприятия для удаления");
+
             events.RemoveAt(eventNumber - 1);
             Console.WriteLine("Мероприятие удалено\n");
         }
 
         public void CopyEvent(int eventNumber, int count)
         {
-            Event evnt = new Event(events[eventNumber - 1]);
+            //Event evnt = new Event((Event)events[eventNumber - 1]);
 
             for (int i = 0; i < count; i++)
             {
-                events.Add(new Event(evnt));
+                //events.Add(new Event(evnt));
+                events.Add(events[eventNumber - 1]);
             }
             Console.WriteLine("Мероприятие скопировано\n");
         }
@@ -102,8 +123,14 @@ namespace LR1NN
             return events.Count;
         }
 
-        public void ShowEvents()
+        public void PrintEvents()
         {
+            if (GetEventsCount() == 0)
+            {
+                Console.WriteLine("Календарь пуст\n");
+                return;
+            }
+
             for (int i = 0; i < events.Count; i++)
             {
                 Console.Write($"{i + 1}: ");
@@ -125,7 +152,7 @@ namespace LR1NN
             Console.WriteLine();
         }
 
-        private static void SortEvents(List<Event> events)
+        private static void SortEvents(List<IEvent> events)
         {
             events.Sort((x, y) =>
             {
@@ -138,6 +165,11 @@ namespace LR1NN
                     cmp = string.Compare(x.GetPlace(), y.GetPlace());
                 return cmp;
             });
+        }
+
+        public IEvent this[int i]
+        {
+            get { return events[i]; }
         }
     }
 }

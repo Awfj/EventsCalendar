@@ -1,10 +1,34 @@
 ﻿using LR1NN;
+using System.Text.RegularExpressions;
 
 List<Event> events = new List<Event>();
 List<OneTimeEvent> oneTimeEvents = new List<OneTimeEvent>();
 List<RecurringEvent> recurringEvents = new List<RecurringEvent>();
 
-int option;
+Calendar calendar;
+int option = Misc.ShowCalendarMenu();
+
+switch (option)
+{
+    case 1:
+        {
+            calendar = new Calendar();
+            break;
+        }
+    case 2:
+        {
+            calendar = new Calendar(new List<IEvent>());
+            break;
+        }
+    case 3:
+        {
+            calendar = new Calendar(new Calendar());
+            break;
+        }
+    default: return;
+}
+
+Console.WriteLine("\nКалендарь мероприятий 2023");
 
 do
 {
@@ -21,24 +45,19 @@ do
                     case 1:
                         {
                             Event evnt = new Event();
-                            events.Add(evnt);
+                            calendar.AddEvent(evnt);
                             break;
                         }
                     case 2:
                         {
                             Tuple<string, string, string> info = Event.InputInfo();
-                            events.Add(new Event(info.Item1, info.Item2, info.Item3));
+                            calendar.AddEvent(new Event(info.Item1, info.Item2, info.Item3));
                             break;
                         }
                     case 3:
                         {
-                            if (Validator.IsListEmpty(events, "Нет мероприятий"))
-                            {
-                                break;
-                            }
-
-                            Event evnt = new Event(Misc.FindEventToCopy(events));
-                            events.Add(evnt);
+                            IEvent foundEvnt = Misc.FindEventToCopy(calendar);
+                            calendar.AddEvent(new Event((Event)foundEvnt));
                             break;
                         }
                 }
@@ -52,32 +71,31 @@ do
                     case 1:
                         {
                             OneTimeEvent evnt = new OneTimeEvent();
-                            events.Add(evnt);
-                            oneTimeEvents.Add(evnt);
+                            calendar.AddEvent(evnt);
                             break;
                         }
                     case 2:
                         {
                             Tuple<string, string, string> info = Event.InputInfo();
-                            int eventDuration = Validator.InputOption(0, 12, 
-                                "Введите продолжительность мероприятия в часах (до 12)");
+                            int eventDuration = Misc.InputDuration();
 
                             OneTimeEvent evnt = new OneTimeEvent(
                                 info.Item1, info.Item2, info.Item3, eventDuration);
-                            events.Add(evnt);
-                            oneTimeEvents.Add(evnt);
+                            calendar.AddEvent(evnt);
                             break;
                         }
                     case 3:
                         {
-                            if (Validator.IsListEmpty(oneTimeEvents, "Нет разовых мероприятий"))
+                            IEvent foundEvnt = Misc.FindEventToCopy(calendar);
+                            if (foundEvnt is not OneTimeEvent)
                             {
-                                break;
+                                Event evnt = new Event((Event)foundEvnt);
+                                calendar.AddEvent(new OneTimeEvent(evnt));
                             }
-
-                            OneTimeEvent evnt = new OneTimeEvent(
-                                Misc.FindEventToCopy(oneTimeEvents));
-                            oneTimeEvents.Add(evnt);
+                            else
+                            {
+                                calendar.AddEvent(new OneTimeEvent((OneTimeEvent)foundEvnt));
+                            }
                             break;
                         }
                 }
@@ -85,88 +103,69 @@ do
             }
         case 3:
             {
-                Console.WriteLine("1 - Конструктор по умолчанию");
-                Console.WriteLine("2 - Конструктор с параметрами");
-                option = Validator.InputOption(1, 2);
-
-                switch (option)
+                try
                 {
-                    case 1:
-                        {
-                            RecurringEvent evnt = new RecurringEvent();
-                            events.Add(evnt);
-                            recurringEvents.Add(evnt);
-                            break;
-                        }
-                    case 2:
-                        {
-                            Tuple<string, string, string> info = Event.InputInfo();
-                            string eventFrequency;
-
-                            do
+                    option = Misc.ShowConstructorMenu();
+                    switch (option)
+                    {
+                        case 1:
                             {
-                                Console.Write("Введите частоту мероприятия " +
-                                    "(день, неделя, месяц, год): ");
-                                eventFrequency = Console.ReadLine();
-
-                            } while (
-                            eventFrequency != "день" &&
-                            eventFrequency != "неделя" &&
-                            eventFrequency != "месяц" &&
-                            eventFrequency != "год");
-
-                            RecurringEvent evnt = new RecurringEvent(
-                                info.Item1, info.Item2, info.Item3, eventFrequency);
-                            events.Add(evnt);
-                            recurringEvents.Add(evnt);
-                            break;
-                        }
-                    case 3:
-                        {
-                            if (Validator.IsListEmpty(recurringEvents, "Нет повторяющихся мероприятий"))
-                            {
+                                RecurringEvent evnt = new RecurringEvent();
+                                calendar.AddEvent(evnt);
                                 break;
                             }
+                        case 2:
+                            {
+                                Tuple<string, string, string> info = Event.InputInfo();
+                                string eventFrequency = Misc.InputFrequency();
 
-                            RecurringEvent evnt = new RecurringEvent(
-                                Misc.FindEventToCopy(recurringEvents));
-                            recurringEvents.Add(evnt);
-                            break;
-                        }
+                                RecurringEvent evnt = new RecurringEvent(
+                                    info.Item1, info.Item2, info.Item3, eventFrequency);
+                                calendar.AddEvent(evnt);
+                                break;
+                            }
+                        case 3:
+                            {
+                                IEvent foundEvnt = Misc.FindEventToCopy(calendar);
+                                if (foundEvnt is not RecurringEvent)
+                                {
+                                    Event evnt = new Event((Event)foundEvnt);
+                                    calendar.AddEvent(new RecurringEvent(evnt));
+                                }
+                                else
+                                {
+                                    calendar.AddEvent(new RecurringEvent((RecurringEvent)foundEvnt));
+                                }
+                                break;
+                            }
+                    }
                 }
+                catch { }
                 break;
             }
         case 4:
             {
-                if (Validator.IsListEmpty(events,
-                    "Нет мероприятий"))
-                {
-                    break;
-                }
-
-                Misc.PrintEvents(events);
+                calendar.DeleteEvent();
                 break;
             }
         case 5:
             {
-                if (Validator.IsListEmpty(oneTimeEvents,
-                    "Нет разовых мероприятий"))
-                {
-                    break;
-                }
-
-                Misc.PrintEvents(oneTimeEvents);
+                calendar.EditEvent();
                 break;
             }
         case 6:
             {
-                if (Validator.IsListEmpty(recurringEvents, 
-                    "Нет повторяющихся мероприятий")) 
-                {
-                    break;
-                }
-
-                Misc.PrintEvents(recurringEvents);
+                calendar.PrintEvents();
+                break;
+            }
+        case 10:
+            {
+                
+                break;
+            }
+        case 9:
+            {
+                
                 break;
             }
         case 7:

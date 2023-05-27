@@ -17,6 +17,12 @@
                 "класса-наследника OneTimeEvent");
             this.duration = duration;
         }
+        public OneTimeEvent(Event evnt) : base(evnt)
+        {
+            Console.WriteLine("Вызван конструктор копирования " +
+                "класса-наследника OneTimeEvent");
+            duration = 0;
+        }
         public OneTimeEvent(OneTimeEvent evnt) : base(evnt)
         {
             Console.WriteLine("Вызван конструктор копирования " +
