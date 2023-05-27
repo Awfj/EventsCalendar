@@ -1,6 +1,6 @@
 ﻿namespace LR1NN
 {
-    public class Event : IEvent
+    public abstract class Event : IEvent
     {
         private string name;
         private string place;
@@ -57,11 +57,6 @@
         {
             return date;
         }
-        public void Show()
-        {
-            Console.WriteLine($"\tНазвание мероприятия: {GetName()}");
-            Console.WriteLine($"\tМесто проведения: {GetPlace()}");
-            Console.WriteLine($"\tДата проведения: {GetDate()}");
-        }
+        public abstract void Show();
     }
 }
