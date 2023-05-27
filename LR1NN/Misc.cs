@@ -1,4 +1,6 @@
-﻿namespace LR1NN
+﻿using System.Text.RegularExpressions;
+
+namespace LR1NN
 {
     public static class Misc
     {
@@ -36,21 +38,6 @@
             Console.WriteLine("3 - Конструктор копирования");
 
             return Validator.InputOption(1, 3);
-        }
-
-        public static void DeleteEvent()
-        {
-
-        }
-
-        public static void PrintEvents<T>(List<T> list) where T : IEvent
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                Console.Write($"{i + 1}: ");
-                list[i].Show();
-            }
-            Console.WriteLine();
         }
 
         public static int InputDuration()
@@ -122,7 +109,7 @@
                     }
                 case 2:
                     {
-                        Tuple<string, string, string> info = Event.InputInfo();
+                        Tuple<string, string, string> info = InputEventInfo();
                         calendar.AddEvent(new Event(info.Item1, info.Item2, info.Item3));
                         break;
                     }
@@ -150,7 +137,7 @@
                     }
                 case 2:
                     {
-                        Tuple<string, string, string> info = Event.InputInfo();
+                        Tuple<string, string, string> info = InputEventInfo();
                         int eventDuration = InputDuration();
 
                         OneTimeEvent evnt = new OneTimeEvent(
@@ -190,7 +177,7 @@
                     }
                 case 2:
                     {
-                        Tuple<string, string, string> info = Event.InputInfo();
+                        Tuple<string, string, string> info = InputEventInfo();
                         string eventFrequency = InputFrequency();
 
                         RecurringEvent evnt = new RecurringEvent(
@@ -215,6 +202,39 @@
                         break;
                     }
             }
+        }
+
+        public static Tuple<string, string, string> InputEventInfo()
+        {
+            string eventName;
+
+            do
+            {
+                Console.Write("Введите название мероприятия: ");
+                eventName = Console.ReadLine();
+
+            } while (eventName == "");
+
+            string eventPlace;
+
+            do
+            {
+                Console.Write("Введите место проведения: ");
+                eventPlace = Console.ReadLine();
+
+            } while (eventPlace == "");
+
+            string eventDate;
+            bool isEventDateValid;
+            do
+            {
+                Console.Write("Введите дату проведения в формате d.m: ");
+                eventDate = Console.ReadLine();
+                isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
+
+            } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
+
+            return new Tuple<string, string, string>(eventName, eventPlace, eventDate);
         }
 
         public static void DemonstrateDestructors()

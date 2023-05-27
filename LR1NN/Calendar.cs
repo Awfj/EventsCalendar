@@ -41,10 +41,9 @@ namespace LR1NN
             PrintEvents();
             int eventNumber = Validator.InputOption(1, GetEventsCount(),
                 "Введите номер мероприятия для редактирования");
+            Tuple<string, string, string> info = Misc.InputEventInfo();
 
             IEvent evnt = events[eventNumber - 1];
-            Tuple<string, string, string> info = Event.InputInfo();
-
             evnt.SetName(info.Item1);
             evnt.SetPlace(info.Item2);
             evnt.SetDate(info.Item3);

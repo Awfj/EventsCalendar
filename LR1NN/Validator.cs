@@ -29,15 +29,5 @@
 
             return option;
         }
-
-        public static bool IsListEmpty<T>(List<T> list, string message)
-        {
-            if (list.Count == 0)
-            {
-                Console.WriteLine($"{message}\n");
-                return true;
-            }
-            return false;
-        }
     }
 }
