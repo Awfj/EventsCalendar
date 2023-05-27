@@ -14,7 +14,7 @@ namespace LR1NN
             Console.WriteLine("6 - Поиск мероприятия");
             Console.WriteLine("7 - Копирование мероприятия");
             Console.WriteLine("8 - Просмотр мероприятий");
-            Console.WriteLine("9 - Демонстрация работы деструкторов и конструкторов копирования");
+            Console.WriteLine("9 - Демонстрация деструкторов");
             Console.WriteLine("0 - Выйти\n");
 
             return Validator.InputOption(0, 9);
@@ -241,8 +241,8 @@ namespace LR1NN
         {
             void CreateObjects()
             {
-                new OneTimeEvent(new OneTimeEvent());
-                new RecurringEvent(new RecurringEvent());
+                new OneTimeEvent();
+                new RecurringEvent();
             };
 
             CreateObjects();
