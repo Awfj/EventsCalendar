@@ -81,8 +81,10 @@ do
             // Поиск минимального и максимального элемента
             if (eventList.IsEmpty() == false)
             {
-                Console.WriteLine($"Минимальное мероприятие: {eventList.Min()}");
-                Console.WriteLine($"Максимальное мероприятие: {eventList.Max()}");
+                Console.WriteLine("Минимальное мероприятие:");
+                eventList.Min().Show();
+                Console.WriteLine("Максимальное мероприятие:");
+                eventList.Max().Show();
             }
 
             if (intList.IsEmpty() == false)
@@ -103,7 +105,7 @@ do
             break;
         case 17:
             // Поиск индекса первого мероприятия в списке
-            if (charList.IsEmpty() == false)
+            if (eventList.IsEmpty() == false)
             {
                 Console.WriteLine(eventList.Find(eventList[0]));
             }

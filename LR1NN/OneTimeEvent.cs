@@ -69,6 +69,6 @@
             Console.WriteLine($"\tМесто проведения: {GetPlace()}");
             Console.WriteLine($"\tДата проведения: {GetDate()}");
             Console.WriteLine($"\tПродолжительность мероприятия (часы): {GetDuration()}");
-        }
+        }        
     }
 }

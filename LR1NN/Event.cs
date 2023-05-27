@@ -78,5 +78,9 @@
         {
             return date;
         }
+        public int CompareTo(IEvent evnt)
+        {
+            return GetName().CompareTo(evnt.GetName());
+        }
     }
 }

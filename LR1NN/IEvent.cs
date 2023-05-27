@@ -1,6 +1,6 @@
 ﻿namespace LR1NN
 {
-    public interface IEvent
+    public interface IEvent : IComparable<IEvent>
     {
         public void SetName(string name);
         public void SetPlace(string place);
