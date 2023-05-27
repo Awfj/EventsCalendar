@@ -2,6 +2,9 @@
 
 Calendar calendar;
 Misc.InitCalendar(out calendar);
+CustomList<IEvent> eventList = new CustomList<IEvent>();
+CustomList<int> intList = new CustomList<int>();
+CustomList<char> charList = new CustomList<char>();
 int option;
 
 Console.WriteLine("\nКалендарь мероприятий 2023");
@@ -14,10 +17,10 @@ do
     switch (option)
     {
         case 1:
-            Misc.AddOneTimeEvent(ref calendar);
+            Misc.AddOneTimeEvent(ref calendar, ref eventList);
             break;
         case 2:
-            Misc.AddRecurringEvent(ref calendar);
+            Misc.AddRecurringEvent(ref calendar, ref eventList);
             break;
         case 3:
             calendar.DeleteEvent();
@@ -45,6 +48,18 @@ do
             break;
         case 11:
             Misc.DemonstrateDestructors();
+            break;
+        case 12:
+            Misc.AddInt(ref intList);
+            break;
+        case 13:
+            Misc.AddChar(ref charList);
+            break;
+        case 14:
+            //Misc.FindMins(ref eventList, ref intList, ref charList);
+            Misc.FindMins(ref eventList, ref intList, ref charList);
+            break;
+        case 15:
             break;
     }
 } while (option != 0);

@@ -6,22 +6,28 @@ namespace LR1NN
     {
         public static int ShowMainMenu()
         {
-            Console.WriteLine("1 - Создание разового мероприятия");
-            Console.WriteLine("2 - Создание повторяющегося мероприятия");
+            Console.WriteLine("1 - Добавление разового мероприятия");
+            Console.WriteLine("2 - Добавление повторяющегося мероприятия");
             Console.WriteLine("3 - Удаление мероприятия");
             Console.WriteLine("4 - Редактирование мероприятия");
             Console.WriteLine("5 - Поиск мероприятия");
             Console.WriteLine("6 - Копирование мероприятия");
             Console.WriteLine("7 - Просмотр мероприятий");
-            Console.WriteLine("8 - Добавление мероприятия по умолчанию " + 
+            Console.WriteLine("8 - Добавление мероприятия по умолчанию " +
                 "постфиксным оператором");
             Console.WriteLine("9 - Добавление мероприятия по умолчанию " +
                 "префиксным оператором");
             Console.WriteLine("10 - Сравнение мероприятий по названию");
             Console.WriteLine("11 - Демонстрация деструкторов");
+            Console.WriteLine("12 - Добавить число в список");
+            Console.WriteLine("13 - Добавить символ в список");
+            Console.WriteLine("14 - Найти минимальный и максимальный символ");
+            Console.WriteLine("15 - Найти мксмимальные элементы в списках");
+            Console.WriteLine("16 - Отсортровать списки");
+            Console.WriteLine("17 - Просмотр списков");
             Console.WriteLine("0 - Выйти\n");
 
-            return Validator.InputOption(0, 11);
+            return Validator.InputOption(0, 17);
         }
 
         public static int ShowCalendarMenu()
@@ -46,7 +52,7 @@ namespace LR1NN
 
         public static int InputDuration()
         {
-            return Validator.InputOption(0, 12, 
+            return Validator.InputOption(0, 12,
                 "Введите продолжительность мероприятия в часах (до 12)");
         }
 
@@ -100,7 +106,7 @@ namespace LR1NN
             }
         }
 
-        public static void AddOneTimeEvent(ref Calendar calendar)
+        public static void AddOneTimeEvent(ref Calendar calendar, ref CustomList<IEvent> list)
         {
             int option = ShowConstructorMenu();
             switch (option)
@@ -109,6 +115,7 @@ namespace LR1NN
                     {
                         OneTimeEvent evnt = new OneTimeEvent();
                         calendar += evnt;
+                        list.Add(evnt);
                         break;
                     }
                 case 2:
@@ -119,6 +126,7 @@ namespace LR1NN
                         OneTimeEvent evnt = new OneTimeEvent(
                             info.Item1, info.Item2, info.Item3, eventDuration);
                         calendar += evnt;
+                        list.Add(evnt);
                         break;
                     }
                 case 3:
@@ -129,17 +137,19 @@ namespace LR1NN
                         if (foundEvnt is OneTimeEvent oneTimeEvent)
                         {
                             calendar += new OneTimeEvent(oneTimeEvent);
-                        } 
+                            list.Add(oneTimeEvent);
+                        }
                         else
                         {
                             calendar += new OneTimeEvent((Event)foundEvnt);
+                            list.Add((Event)foundEvnt);
                         }
                         break;
                     }
             }
         }
 
-        public static void AddRecurringEvent(ref Calendar calendar)
+        public static void AddRecurringEvent(ref Calendar calendar, ref CustomList<IEvent> list)
         {
             int option = ShowConstructorMenu();
             switch (option)
@@ -148,6 +158,7 @@ namespace LR1NN
                     {
                         RecurringEvent evnt = new RecurringEvent();
                         calendar += evnt;
+                        list.Add(evnt);
                         break;
                     }
                 case 2:
@@ -158,6 +169,7 @@ namespace LR1NN
                         RecurringEvent evnt = new RecurringEvent(
                             info.Item1, info.Item2, info.Item3, eventFrequency);
                         calendar += evnt;
+                        list.Add(evnt);
                         break;
                     }
                 case 3:
@@ -168,10 +180,12 @@ namespace LR1NN
                         if (foundEvnt is RecurringEvent recurringEvent)
                         {
                             calendar += new RecurringEvent(recurringEvent);
+                            list.Add(recurringEvent);
                         }
                         else
                         {
                             calendar += new RecurringEvent((Event)foundEvnt);
+                            list.Add((Event)foundEvnt);
                         }
                         break;
                     }
@@ -270,6 +284,29 @@ namespace LR1NN
             Console.Write($"Результат сравнения " +
                 $"({evntA.GetName()} {cmpOperator} " +
                 $"{evntB.GetName()}): {cmpResult}\n\n");
+        }
+
+        public static void AddInt(ref CustomList<int> list)
+        {
+            int input = Validator.InputOption(int.MinValue, int.MaxValue,
+                "Введите число");
+            list.Add(input);
+        }
+
+        public static void AddChar(ref CustomList<char> list)
+        {
+            list.Add(Validator.InputСhar());
+        }
+
+        public static void FindMins(
+            ref CustomList<IEvent> eventList, 
+            ref CustomList<int> intList, 
+            ref CustomList<char> charList)
+        {
+            if (charList.IsEmpty()) return;
+
+            Console.WriteLine($"Минимальный символ: {charList.Min()}");
+            Console.WriteLine($"Максимальный символ: {charList.Max()}");
         }
     }
 }

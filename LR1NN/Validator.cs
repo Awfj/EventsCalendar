@@ -29,5 +29,18 @@
 
             return option;
         }
+
+        public static char InputСhar()
+        {
+            char input;
+            string readInput;
+            do
+            {
+                Console.Write($"Введите символ: ");
+                readInput = Console.ReadLine();
+            } while (!char.TryParse(readInput, out input));
+
+            return input;
+        }
     }
 }
