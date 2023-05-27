@@ -44,7 +44,7 @@
             return frequency;
         }
 
-        public new void Show()
+        public void Show()
         {
             Console.WriteLine($"\tНазвание мероприятия: {GetName()}");
             Console.WriteLine($"\tМесто проведения: {GetPlace()}");
