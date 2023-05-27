@@ -13,21 +13,25 @@ namespace LR1NN
             Console.WriteLine("5 - Поиск мероприятия");
             Console.WriteLine("6 - Копирование мероприятия");
             Console.WriteLine("7 - Просмотр мероприятий");
-            Console.WriteLine("8 - Добавление мероприятия по умолчанию " +
-                "постфиксным оператором");
+            Console.WriteLine("8 - Демонстрация деструкторов\n");
+
             Console.WriteLine("9 - Добавление мероприятия по умолчанию " +
+                "постфиксным оператором");
+            Console.WriteLine("10 - Добавление мероприятия по умолчанию " +
                 "префиксным оператором");
-            Console.WriteLine("10 - Сравнение мероприятий по названию");
-            Console.WriteLine("11 - Демонстрация деструкторов");
-            Console.WriteLine("12 - Добавить число в список");
-            Console.WriteLine("13 - Добавить символ в список");
-            Console.WriteLine("14 - Найти минимальный и максимальный символ");
-            Console.WriteLine("15 - Найти мксмимальные элементы в списках");
-            Console.WriteLine("16 - Отсортровать списки");
-            Console.WriteLine("17 - Просмотр списков");
+            Console.WriteLine("11 - Сравнение мероприятий по названию\n");
+
+            Console.WriteLine("12 - Добавление числа в список");
+            Console.WriteLine("13 - Добавление символа в список");
+            Console.WriteLine("14 - Просмотр списков");
+            Console.WriteLine("15 - Сортировка списков");
+            Console.WriteLine("16 - Поиск минимального и максимального элемента");
+            Console.WriteLine("17 - Поиск индекса мероприятия в списке");
+            Console.WriteLine("18 - Поиск индекса числа в списке");
+            Console.WriteLine("19 - Поиск индекса символа в списке");
             Console.WriteLine("0 - Выйти\n");
 
-            return Validator.InputOption(0, 17);
+            return Validator.InputOption(0, 19);
         }
 
         public static int ShowCalendarMenu()
@@ -220,6 +224,18 @@ namespace LR1NN
                 eventDate = Console.ReadLine();
                 isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
 
+                try
+                {
+                    if (!isEventDateValid)
+                    {
+                        throw new InvalidDateException();
+                    }
+                }
+                catch(InvalidDateException ex)
+                {
+                    Console.Write(ex);
+                }
+
             } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
 
             return new Tuple<string, string, string>(eventName, eventPlace, eventDate);
@@ -252,16 +268,23 @@ namespace LR1NN
 
         public static void CompareEvents(ref Calendar calendar)
         {
-            string cmpOperator;
+            Console.Write("Выберите оператор сравнения (>, <, ==): ");
+            string cmpOperator = Console.ReadLine();
 
-            do
+            try
             {
-                Console.Write("Выберите оператор сравнения (>, <, ==): ");
-                cmpOperator = Console.ReadLine();
-
-            } while (cmpOperator != ">" &&
-                     cmpOperator != "<" &&
-                     cmpOperator != "==");
+                if (cmpOperator != ">" && 
+                    cmpOperator != "<" && 
+                    cmpOperator != "==")
+                {
+                    throw new IncorrectInputException();
+                }
+            }
+            catch(IncorrectInputException ex)
+            {
+                Console.WriteLine(ex);
+                return;
+            }
 
             if (calendar.IsEmpty()) return;
             calendar.PrintEvents();
@@ -286,27 +309,16 @@ namespace LR1NN
                 $"{evntB.GetName()}): {cmpResult}\n\n");
         }
 
-        public static void AddInt(ref CustomList<int> list)
+        public static int InputInt()
         {
             int input = Validator.InputOption(int.MinValue, int.MaxValue,
                 "Введите число");
-            list.Add(input);
+            return input;
         }
 
-        public static void AddChar(ref CustomList<char> list)
+        public static char InputChar()
         {
-            list.Add(Validator.InputСhar());
-        }
-
-        public static void FindMins(
-            ref CustomList<IEvent> eventList, 
-            ref CustomList<int> intList, 
-            ref CustomList<char> charList)
-        {
-            if (charList.IsEmpty()) return;
-
-            Console.WriteLine($"Минимальный символ: {charList.Min()}");
-            Console.WriteLine($"Максимальный символ: {charList.Max()}");
+            return Validator.InputСhar();
         }
     }
 }

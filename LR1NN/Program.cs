@@ -38,28 +38,83 @@ do
             calendar.PrintEvents();
             break;
         case 8:
-            Misc.AddEventPostfix(ref calendar);
-            break;
-        case 9:
-            Misc.AddEventPrefix(ref calendar);
-            break;
-        case 10:
-            Misc.CompareEvents(ref calendar);
-            break;
-        case 11:
             Misc.DemonstrateDestructors();
             break;
+
+        case 9:
+            Misc.AddEventPostfix(ref calendar);
+            break;
+        case 10:
+            Misc.AddEventPrefix(ref calendar);
+            break;
+        case 11:
+            Misc.CompareEvents(ref calendar);
+            break;
+
         case 12:
-            Misc.AddInt(ref intList);
+            // Добавление числа в список
+            intList.Add(Misc.InputInt());
             break;
         case 13:
-            Misc.AddChar(ref charList);
+            // Добавление символа в список
+            charList.Add(Misc.InputChar());
             break;
         case 14:
-            //Misc.FindMins(ref eventList, ref intList, ref charList);
-            Misc.FindMins(ref eventList, ref intList, ref charList);
+            // Просмотр списков
+            Console.WriteLine("Список мероприятий:");
+            eventList.Print();
+
+            Console.WriteLine("Список чисел:");
+            intList.Print();
+
+            Console.WriteLine("Список символов:");
+            charList.Print();
             break;
         case 15:
+            // Сортировка списков
+            eventList.Sort();
+            intList.Sort();
+            charList.Sort();
+            Console.WriteLine("Списки отсортированы");
+            break;
+        case 16:
+            // Поиск минимального и максимального элемента
+            if (eventList.IsEmpty() == false)
+            {
+                Console.WriteLine($"Минимальное мероприятие: {eventList.Min()}");
+                Console.WriteLine($"Максимальное мероприятие: {eventList.Max()}");
+            }
+
+            if (intList.IsEmpty() == false)
+            {
+                Console.WriteLine($"Минимальное число: {intList.Min()}");
+                Console.WriteLine($"Максимальное число: {intList.Max()}");
+            }
+            try
+            {
+                Console.WriteLine($"Минимальный символ: {charList.Min()}");
+                Console.WriteLine($"Максимальный символ: {charList.Max()}");
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex);
+            }
+                
+            break;
+        case 17:
+            // Поиск индекса первого мероприятия в списке
+            if (charList.IsEmpty() == false)
+            {
+                Console.WriteLine(eventList.Find(eventList[0]));
+            }
+            break;
+        case 18:
+            // Поиск индекса числа в списке
+            Console.WriteLine(intList.Find(Misc.InputInt()));
+            break;
+        case 19:
+            // Поиск индекса символа в списке
+            Console.WriteLine(charList.Find(Misc.InputChar()));
             break;
     }
 } while (option != 0);

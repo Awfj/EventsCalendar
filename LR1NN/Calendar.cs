@@ -41,9 +41,20 @@ namespace LR1NN
             return calendar;
         }
 
-        public IEvent this[int i]
+        public IEvent this[int index]
         {
-            get { return events[i]; }
+            get
+            {
+                try
+                {
+                    return events[index];
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
+            }
         }
 
         public void AddEvent(IEvent evnt)

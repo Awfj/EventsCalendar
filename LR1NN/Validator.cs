@@ -34,11 +34,23 @@
         {
             char input;
             string readInput;
+
             do
             {
                 Console.Write($"Введите символ: ");
                 readInput = Console.ReadLine();
-            } while (!char.TryParse(readInput, out input));
+
+                try
+                {
+                    input = char.Parse(readInput);
+                    break;
+                }
+                catch(FormatException ex)
+                {
+                    Console.WriteLine(ex);
+                }
+                
+            } while (true);
 
             return input;
         }

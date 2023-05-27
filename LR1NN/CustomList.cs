@@ -37,32 +37,26 @@
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine("Ошибка: " + ex.Message);
+                Console.WriteLine(ex.Message);
                 return default;
             }
         }
 
         public T Max()
         {
-            try
-            {
-                return list.Max();
-            }
-            catch(InvalidOperationException ex) {
-                Console.WriteLine("Ошибка: " + ex.Message);
-                return default;
-            }
+            return list.Max();
         }
 
         // Сортировка по номеру договора
         public void Sort()
         {
-            Console.WriteLine("Список отсортирован.");
             list.Sort();
         }
 
         public void Print()
         {
+            if (IsEmpty()) return;
+
             foreach (T item in list)
             {
                 if (item is Event evnt)
