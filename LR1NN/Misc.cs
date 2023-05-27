@@ -13,10 +13,15 @@ namespace LR1NN
             Console.WriteLine("5 - Поиск мероприятия");
             Console.WriteLine("6 - Копирование мероприятия");
             Console.WriteLine("7 - Просмотр мероприятий");
-            Console.WriteLine("8 - Демонстрация деструкторов");
+            Console.WriteLine("8 - Добавление мероприятия по умолчанию " + 
+                "постфиксным оператором");
+            Console.WriteLine("9 - Добавление мероприятия по умолчанию " +
+                "префиксным оператором");
+            Console.WriteLine("10 - Сравнение мероприятий по названию");
+            Console.WriteLine("11 - Демонстрация деструкторов");
             Console.WriteLine("0 - Выйти\n");
 
-            return Validator.InputOption(0, 8);
+            return Validator.InputOption(0, 11);
         }
 
         public static int ShowCalendarMenu()
@@ -103,7 +108,7 @@ namespace LR1NN
                 case 1:
                     {
                         OneTimeEvent evnt = new OneTimeEvent();
-                        calendar.AddEvent(evnt);
+                        calendar += evnt;
                         break;
                     }
                 case 2:
@@ -113,7 +118,7 @@ namespace LR1NN
 
                         OneTimeEvent evnt = new OneTimeEvent(
                             info.Item1, info.Item2, info.Item3, eventDuration);
-                        calendar.AddEvent(evnt);
+                        calendar += evnt;
                         break;
                     }
                 case 3:
@@ -123,11 +128,11 @@ namespace LR1NN
                         IEvent foundEvnt = FindEventToCopy(calendar);
                         if (foundEvnt is OneTimeEvent oneTimeEvent)
                         {
-                            calendar.AddEvent(new OneTimeEvent(oneTimeEvent));
+                            calendar += new OneTimeEvent(oneTimeEvent);
                         } 
                         else
                         {
-                            calendar.AddEvent(new OneTimeEvent((Event)foundEvnt));
+                            calendar += new OneTimeEvent((Event)foundEvnt);
                         }
                         break;
                     }
@@ -142,7 +147,7 @@ namespace LR1NN
                 case 1:
                     {
                         RecurringEvent evnt = new RecurringEvent();
-                        calendar.AddEvent(evnt);
+                        calendar += evnt;
                         break;
                     }
                 case 2:
@@ -152,7 +157,7 @@ namespace LR1NN
 
                         RecurringEvent evnt = new RecurringEvent(
                             info.Item1, info.Item2, info.Item3, eventFrequency);
-                        calendar.AddEvent(evnt);
+                        calendar += evnt;
                         break;
                     }
                 case 3:
@@ -162,11 +167,11 @@ namespace LR1NN
                         IEvent foundEvnt = FindEventToCopy(calendar);
                         if (foundEvnt is RecurringEvent recurringEvent)
                         {
-                            calendar.AddEvent(new RecurringEvent(recurringEvent));
+                            calendar += new RecurringEvent(recurringEvent);
                         }
                         else
                         {
-                            calendar.AddEvent(new RecurringEvent((Event)foundEvnt));
+                            calendar += new RecurringEvent((Event)foundEvnt);
                         }
                         break;
                     }
@@ -217,6 +222,54 @@ namespace LR1NN
             CreateObjects();
             GC.Collect();
             Console.WriteLine();
+        }
+
+        public static void AddEventPostfix(ref Calendar calendar)
+        {
+            if (calendar.IsEmpty()) return;
+            calendar++;
+        }
+
+        public static void AddEventPrefix(ref Calendar calendar)
+        {
+            if (calendar.IsEmpty()) return;
+            ++calendar;
+        }
+
+        public static void CompareEvents(ref Calendar calendar)
+        {
+            string cmpOperator;
+
+            do
+            {
+                Console.Write("Выберите оператор сравнения (>, <, ==): ");
+                cmpOperator = Console.ReadLine();
+
+            } while (cmpOperator != ">" &&
+                     cmpOperator != "<" &&
+                     cmpOperator != "==");
+
+            if (calendar.IsEmpty()) return;
+            calendar.PrintEvents();
+
+            int eventNumber = Validator.InputOption(1, calendar.GetEventsCount(),
+                "Введите номер первого мероприятия для сравнения");
+            Event evntA = (Event)calendar[eventNumber - 1];
+
+            eventNumber = Validator.InputOption(1, calendar.GetEventsCount(),
+                "Введите номер второго мероприятия для сравнения");
+            Event evntB = (Event)calendar[eventNumber - 1];
+
+            bool cmpResult = cmpOperator switch
+            {
+                ">" => evntA > evntB,
+                "<" => evntA < evntB,
+                _ => evntA == evntB,
+            };
+
+            Console.Write($"Результат сравнения " +
+                $"({evntA.GetName()} {cmpOperator} " +
+                $"{evntB.GetName()}): {cmpResult}\n\n");
         }
     }
 }

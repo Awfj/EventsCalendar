@@ -26,6 +26,26 @@ namespace LR1NN
             Console.WriteLine("Вызван деструктор основного класса");
         }
 
+        public static Calendar operator +(Calendar calendar, IEvent evnt)
+        {
+            calendar.AddEvent(evnt);
+            return calendar;
+        }
+        public static Calendar operator ++(Calendar calendar)
+        {
+            if (calendar.events.Count > 0)
+            {
+                IEvent temp = calendar[0];
+                calendar.AddEvent(temp);
+            }
+            return calendar;
+        }
+
+        public IEvent this[int i]
+        {
+            get { return events[i]; }
+        }
+
         public void AddEvent(IEvent evnt)
         {
             events.Add(evnt);
@@ -181,11 +201,6 @@ namespace LR1NN
                     cmp = string.Compare(x.GetPlace(), y.GetPlace());
                 return cmp;
             });
-        }
-
-        public IEvent this[int i]
-        {
-            get { return events[i]; }
         }
     }
 }

@@ -35,6 +35,25 @@
                 "класса-наследника RecurringEvent");
         }
 
+        public static bool operator <(RecurringEvent a, RecurringEvent b)
+        {
+            int cmp = string.Compare(a.GetName(), b.GetName());
+            return cmp < 0;
+        }
+        public static bool operator >(RecurringEvent a, RecurringEvent b)
+        {
+            int cmp = string.Compare(a.GetName(), b.GetName());
+            return cmp > 0;
+        }
+        public static bool operator ==(RecurringEvent a, RecurringEvent b)
+        {
+            return a.GetName().Equals(b.GetName());
+        }
+        public static bool operator !=(RecurringEvent a, RecurringEvent b)
+        {
+            return a.GetName().Equals(b.GetName()) == false;
+        }
+
         public void SetFrequency(string frequency)
         {
             this.frequency = frequency;

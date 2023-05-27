@@ -33,6 +33,27 @@
             Console.WriteLine("Вызван деструктор базового класса");
         }
 
+        public static bool operator <(Event a, Event b)
+        {
+            int cmp = string.Compare(a.GetName(), b.GetName());
+            return cmp < 0;
+        }
+        public static bool operator >(Event a, Event b)
+        {
+            int cmp = string.Compare(a.GetName(), b.GetName());
+            return cmp > 0;
+        }
+        public static bool operator ==(Event a, Event b)
+        {
+            return a.GetName().Equals(b.GetName());
+        }
+        public static bool operator !=(Event a, Event b)
+        {
+            return a.GetName().Equals(b.GetName()) == false;
+        }
+
+        public abstract void Show();
+
         public void SetName(string name)
         {
             this.name = name;
@@ -57,6 +78,5 @@
         {
             return date;
         }
-        public abstract void Show();
     }
 }
