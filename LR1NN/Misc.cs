@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace LR1NN
 {
@@ -228,12 +229,14 @@ namespace LR1NN
                 {
                     if (!isEventDateValid)
                     {
-                        throw new InvalidDateException();
+                        throw new InvalidDateException("InvalidDateException. " +
+                            "Неверная дата. Установлена на сегодня");
                     }
                 }
-                catch(InvalidDateException ex)
-                {
-                    Console.Write(ex);
+                catch(InvalidDateException) {
+                    DateTime now = DateTime.Now;
+                    eventDate = $"{now.Day}.{now.Month}";
+                    break;
                 }
 
             } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
@@ -277,12 +280,12 @@ namespace LR1NN
                     cmpOperator != "<" && 
                     cmpOperator != "==")
                 {
-                    throw new IncorrectInputException();
+                    throw new IncorrectInputException("IncorrectInputException. " +
+                        "Неверный оператор сравнения. Отмена ввода");
                 }
             }
-            catch(IncorrectInputException ex)
+            catch(IncorrectInputException)
             {
-                Console.WriteLine(ex);
                 return;
             }
 

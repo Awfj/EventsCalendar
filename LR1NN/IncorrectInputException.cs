@@ -2,8 +2,9 @@
 {
     public class IncorrectInputException : Exception
     {
-        public IncorrectInputException()
+        public IncorrectInputException(string message)
         {
+            Console.WriteLine(message);
         }
     }
 }
