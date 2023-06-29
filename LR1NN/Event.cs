@@ -28,11 +28,11 @@
         public string Place { get; set; }
         public string Date { get; set; }
 
-        public void Show()
+        public string GetInfo()
         {
-            Console.WriteLine($"\tНазвание мероприятия: {Name}");
-            Console.WriteLine($"\tМесто проведения: {Place}");
-            Console.WriteLine($"\tДата проведения: {Date}");
+            return $"\tНазвание мероприятия: {Name}" +
+                $"\n\tМесто проведения: {Place}" +
+                $"\n\tДата проведения: {Date}";
         }
     }
 }

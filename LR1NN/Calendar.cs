@@ -10,7 +10,6 @@ namespace LR1NN
         {
             events.Add(evnt);
             SortEvents(events);
-            Console.WriteLine("Мероприятие добавлено\n");
         }
 
         public void AddEvent(string name, string place, string date)
@@ -18,7 +17,6 @@ namespace LR1NN
             Event evnt = new(name, place, date);
             events.Add(evnt);
             SortEvents(events);
-            Console.WriteLine("Мероприятие добавлено\n");
         }
 
         public void EditEvent(int eventNumber, string name, string place, string date)
@@ -27,13 +25,11 @@ namespace LR1NN
             evnt.Name = name;
             evnt.Place = place;
             evnt.Date = date;
-            Console.WriteLine("Мероприятие изменено\n");
         }
 
         public void DeleteEvent(int eventNumber)
         {
             events.RemoveAt(eventNumber - 1);
-            Console.WriteLine("Мероприятие удалено\n");
         }
 
         public void CopyEvent(int eventNumber, int count)
@@ -44,7 +40,6 @@ namespace LR1NN
             {
                 events.Add(new Event(evnt));
             }
-            Console.WriteLine("Мероприятие скопировано\n");
         }
 
         public bool IsEmpty()
@@ -57,14 +52,18 @@ namespace LR1NN
             return events.Count;
         }
 
-        public void ShowEvents()
+        public string GetEventsInfo()
         {
+            string result = "";
+
             for (int i = 0; i < events.Count; i++)
             {
-                Console.Write($"{i + 1}: ");
-                events[i].Show();
+                result += $"{i + 1}: ";
+                result += events[i].GetInfo();
+                result += "\n";
             }
-            Console.WriteLine();
+
+            return result;
         }
 
         public void SearchEventByName(string name)
@@ -74,7 +73,7 @@ namespace LR1NN
                 if (events[i].Name == name)
                 {
                     Console.Write($"{i + 1}: ");
-                    events[i].Show();
+                    Console.WriteLine(events[i].GetInfo());
                 }
             }
             Console.WriteLine();

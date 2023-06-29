@@ -16,7 +16,6 @@ do
     Console.WriteLine("4 - Поиск мероприятия");
     Console.WriteLine("5 - Просмотр мероприятий");
     Console.WriteLine("6 - Копирование мероприятия");
-    Console.WriteLine("7 - Демонстрация работы деструкторов");
     Console.WriteLine("0 - Выйти");
 
     do
@@ -60,17 +59,18 @@ do
 
                 Event evnt = new(eventName, eventPlace, eventDate);
                 calendar.AddEvent(evnt);
+                Console.WriteLine("Мероприятие добавлено\n");
                 break;
             }
         case 2:
             {
                 if (calendar.IsEmpty())
                 {
-                    Console.WriteLine("Календарь пуст\n");
+                    Console.WriteLine("Календарь пуст!\n");
                     break;
                 }
 
-                calendar.ShowEvents();
+                ShowEvents();
                 int eventNumber;
 
                 do
@@ -78,11 +78,12 @@ do
                     Console.Write("Введите номер мероприятия для удаления: ");
                     optionRead = Console.ReadLine();
 
-                } while (!int.TryParse(optionRead, out eventNumber) || 
-                    eventNumber < 1 || 
-                    eventNumber > calendar.GetEventsCount());
+                } while (!int.TryParse(optionRead, out eventNumber) 
+                || eventNumber < 1 
+                || eventNumber > calendar.GetEventsCount());
 
                 calendar.DeleteEvent(eventNumber);
+                Console.WriteLine("Мероприятие удалено!\n");
                 break;
             }
         case 3:
@@ -93,7 +94,7 @@ do
                     break;
                 }
 
-                calendar.ShowEvents();
+                ShowEvents();
                 int eventNumber;
 
                 do
@@ -134,6 +135,7 @@ do
                 } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
 
                 calendar.EditEvent(eventNumber, eventName, eventPlace, eventDate);
+                Console.WriteLine("Мероприятие изменено\n");
                 break;
             }
         case 4:
@@ -158,7 +160,7 @@ do
                     break;
                 }
 
-                calendar.ShowEvents();
+                ShowEvents();
                 break;
             }
         case 6:
@@ -169,7 +171,7 @@ do
                     break;
                 }
 
-                calendar.ShowEvents();
+                ShowEvents();
                 int eventNumber;
                 int copyAmount;
 
@@ -192,20 +194,13 @@ do
                     copyAmount > 10);
 
                 calendar.CopyEvent(eventNumber, copyAmount);
-                break;
-            }
-        case 7:
-            {
-                void CreateObjects()
-                {
-                    new Calendar();
-                    new Event();
-                };
-
-                CreateObjects();
-                GC.Collect();
-                Console.WriteLine();
+                Console.WriteLine("Мероприятие скопировано!\n");
                 break;
             }
     }
 } while (option != 0);
+
+void ShowEvents()
+{
+    Console.WriteLine(calendar.GetEventsInfo());
+}
