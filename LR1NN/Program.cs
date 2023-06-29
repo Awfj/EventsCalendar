@@ -1,46 +1,16 @@
 ﻿using LR1NN;
 using System.Text.RegularExpressions;
 
-Calendar calendar;
+Calendar calendar = new();
 int option;
 string optionRead;
 
-Console.WriteLine("Создание календаря");
-Console.WriteLine("1 - Конструктор по умолчанию");
-Console.WriteLine("2 - Конструктор с параметрами");
-Console.WriteLine("3 - Конструктор копирования");
-Console.WriteLine("0 - Выйти");
+Console.WriteLine("КАЛЕНДАРЬ МЕРОПРИЯТИЙ");
 
 do
 {
-    Console.Write("Введите число из меню: ");
-    optionRead = Console.ReadLine();
 
-} while (!int.TryParse(optionRead, out option) || option < 0 || option > 3);
-
-switch (option)
-{
-    case 1:
-        {
-            calendar = new Calendar();
-            break;
-        }
-    case 2:
-        {
-            calendar = new Calendar(new List<Event>());
-            break;
-        }
-    case 3:
-        {
-            calendar = new Calendar(new Calendar());
-            break;
-        }
-    default: return;
-}
-
-Console.WriteLine("\nКалендарь мероприятий 2023");
-do
-{
+    Console.WriteLine("МЕНЮ");
     Console.WriteLine("1 - Добавление мероприятия");
     Console.WriteLine("2 - Удаление мероприятия");
     Console.WriteLine("3 - Редактирование мероприятия");

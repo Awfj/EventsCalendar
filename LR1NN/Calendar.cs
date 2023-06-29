@@ -8,24 +8,16 @@ namespace LR1NN
 
         public Calendar()
         {
-            Console.WriteLine("Вызван конструктор по умолчанию основного класса");
         }
         public Calendar(List<Event> events)
         {
-            Console.WriteLine("Вызван конструктор с параметрами основного класса");
             this.events = events;
         }
 
         public Calendar(Calendar calendar)
         {
-            Console.WriteLine("Вызван конструктор копирования основного класса");
             events = calendar.events;
         }
-        ~Calendar()
-        {
-            Console.WriteLine("Вызван деструктор основного класса");
-        }
-
         public void AddEvent(Event evnt)
         {
             events.Add(evnt);
@@ -43,9 +35,9 @@ namespace LR1NN
         public void EditEvent(int eventNumber, string name, string place, string date)
         {
             Event evnt = events[eventNumber - 1];
-            evnt.SetName(name);
-            evnt.SetPlace(place);
-            evnt.SetDate(date);
+            evnt.Name = name;
+            evnt.Place = place;
+            evnt.Date = date;
             Console.WriteLine("Мероприятие изменено\n");
         }
 
@@ -90,7 +82,7 @@ namespace LR1NN
         {
             for (int i = 0; i < events.Count; i++)
             {
-                if (events[i].GetName() == name)
+                if (events[i].Name == name)
                 {
                     Console.Write($"{i + 1}: ");
                     events[i].Show();
@@ -103,13 +95,13 @@ namespace LR1NN
         {
             events.Sort((x, y) =>
             {
-                DateTime xDate = DateTime.ParseExact(x.GetDate(), "d.M", CultureInfo.InvariantCulture);
-                DateTime yDate = DateTime.ParseExact(y.GetDate(), "d.M", CultureInfo.InvariantCulture);
+                DateTime xDate = DateTime.ParseExact(x.Date, "d.M", CultureInfo.InvariantCulture);
+                DateTime yDate = DateTime.ParseExact(y.Date, "d.M", CultureInfo.InvariantCulture);
                 int cmp = xDate.CompareTo(yDate);
                 if (cmp == 0)
-                    cmp = string.Compare(x.GetName(), y.GetName());
+                    cmp = string.Compare(x.Name, y.Name);
                 if (cmp == 0)
-                    cmp = string.Compare(x.GetPlace(), y.GetPlace());
+                    cmp = string.Compare(x.Place, y.Place);
                 return cmp;
             });
         }

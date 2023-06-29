@@ -2,66 +2,37 @@
 {
     public class Event
     {
-        private string name;
-        private string place;
-        private string date;
-
         public Event()
         {
-            Console.WriteLine("Вызван конструктор по умолчанию дополнительного класса");
             DateTime now = DateTime.Now;
-            name = "Unknown";
-            place = "Unknown";
-            date = $"{now.Day}.{now.Month}";
+
+            Name = "Unknown";
+            Place = "Unknown";
+            Date = $"{now.Day}.{now.Month}";
         }
+
         public Event(string name, string place, string date)
         {
-            Console.WriteLine("Вызван конструктор с параметрами дополнительного класса");
-            this.name = name;
-            this.place = place;
-            this.date = date;
+            Name = name;
+            Place = place;
+            Date = date;
         }
         public Event(Event evnt)
         {
-            Console.WriteLine("Вызван конструктор копирования дополнительного класса");
-            name = evnt.GetName();
-            place = evnt.GetPlace();
-            date = evnt.GetDate();
-        }
-        ~Event()
-        {
-            Console.WriteLine("Вызван деструктор дополнительного класса\n");
+            Name = evnt.Name;
+            Place = evnt.Place;
+            Date = evnt.Date;
         }
 
-        public void SetName(string name)
-        {
-            this.name = name;
-        }
-        public void SetPlace(string place)
-        {
-            this.place = place;
-        }
-        public void SetDate(string date)
-        {
-            this.date = date;
-        }
-        public string GetName()
-        {
-            return name;
-        }
-        public string GetPlace()
-        {
-            return place;
-        }
-        public string GetDate()
-        {
-            return date;
-        }
+        public string Name { get; set; }
+        public string Place { get; set; }
+        public string Date { get; set; }
+
         public void Show()
         {
-            Console.WriteLine($"\tНазвание мероприятия: {GetName()}");
-            Console.WriteLine($"\tМесто проведения: {GetPlace()}");
-            Console.WriteLine($"\tДата проведения: {GetDate()}");
+            Console.WriteLine($"\tНазвание мероприятия: {Name}");
+            Console.WriteLine($"\tМесто проведения: {Place}");
+            Console.WriteLine($"\tДата проведения: {Date}");
         }
     }
 }
