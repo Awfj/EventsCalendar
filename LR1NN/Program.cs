@@ -3,13 +3,12 @@ using System.Text.RegularExpressions;
 
 Calendar calendar = new();
 int option;
-string optionRead;
+string? optionRead;
 
 Console.WriteLine("КАЛЕНДАРЬ МЕРОПРИЯТИЙ");
 
 do
 {
-
     Console.WriteLine("МЕНЮ");
     Console.WriteLine("1 - Добавление мероприятия");
     Console.WriteLine("2 - Удаление мероприятия");
@@ -33,82 +32,34 @@ do
     {
         case 1:
             {
-                Console.WriteLine("1 - Конструктор по умолчанию");
-                Console.WriteLine("2 - Конструктор с параметрами");
-
+                string? eventName;
                 do
                 {
-                    Console.Write("Введите число из меню: ");
-                    optionRead = Console.ReadLine();
+                    Console.Write("Введите название мероприятия: ");
+                    eventName = Console.ReadLine();
 
-                } while (!int.TryParse(optionRead, out option) || option < 1 || option > 2);
+                } while (string.IsNullOrEmpty(eventName));
 
-                switch (option)
+                string? eventPlace;
+                do
                 {
-                    case 1:
-                        {
-                            Event evnt = new Event();
-                            calendar.AddEvent(evnt);
-                            break;
-                        }
-                    case 2:
-                        {
-                            string eventName;
+                    Console.Write("Введите место проведения: ");
+                    eventPlace = Console.ReadLine();
 
-                            do
-                            {
-                                Console.Write("Введите название мероприятия: ");
-                                eventName = Console.ReadLine();
+                } while (string.IsNullOrEmpty(eventPlace));
 
-                            } while (eventName == "");
+                string? eventDate;
+                do
+                {
+                    Console.Write("Введите числами дату проведения в формате ДЕНЬ.МЕСЯЦ: ");
+                    eventDate = Console.ReadLine();
 
-                            string eventPlace;
+                } while (string.IsNullOrEmpty(eventDate) 
+                || Regex.IsMatch(eventDate, Validator.DATE_PATTERN) == false 
+                || Validator.IsDateCorrect(eventDate) == false);
 
-                            do
-                            {
-                                Console.Write("Введите место проведения: ");
-                                eventPlace = Console.ReadLine();
-
-                            } while (eventPlace == "");
-
-                            string eventDate;
-                            bool isEventDateValid;
-                            do
-                            {
-                                Console.Write("Введите дату проведения в формате d.m: ");
-                                eventDate = Console.ReadLine();
-                                isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
-
-                            } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
-
-                            Console.WriteLine("\n1 - Вызов метода Event(Event evnt)");
-                            Console.WriteLine("2 - Вызов метода Event(string name, " +
-                                "string place, string date)");
-
-                            do
-                            {
-                                Console.Write("Введите число из меню: ");
-                                optionRead = Console.ReadLine();
-
-                            } while (!int.TryParse(optionRead, out option) || option < 1 || option > 2);
-
-                            switch (option)
-                            {
-                                case 1:
-                                    {
-                                        calendar.AddEvent(new Event(eventName, eventPlace, eventDate));
-                                        break;
-                                    }
-                                    
-                                case 2:
-                                    {
-                                        calendar.AddEvent(eventName, eventPlace, eventDate);
-                                        break;
-                                    }   
-                            }
-                            break;
-                        }
-                }
+                Event evnt = new(eventName, eventPlace, eventDate);
+                calendar.AddEvent(evnt);
                 break;
             }
         case 2:

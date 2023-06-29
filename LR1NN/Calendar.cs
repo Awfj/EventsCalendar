@@ -4,30 +4,19 @@ namespace LR1NN
 {
     public class Calendar
     {
-        private List<Event> events = new List<Event>();
+        private readonly List<Event> events = new();
 
-        public Calendar()
-        {
-        }
-        public Calendar(List<Event> events)
-        {
-            this.events = events;
-        }
-
-        public Calendar(Calendar calendar)
-        {
-            events = calendar.events;
-        }
         public void AddEvent(Event evnt)
         {
             events.Add(evnt);
             SortEvents(events);
-
             Console.WriteLine("Мероприятие добавлено\n");
         }
+
         public void AddEvent(string name, string place, string date)
         {
-            events.Add(new Event(name, place, date));
+            Event evnt = new(name, place, date);
+            events.Add(evnt);
             SortEvents(events);
             Console.WriteLine("Мероприятие добавлено\n");
         }
