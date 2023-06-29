@@ -37,7 +37,7 @@ do
                     Console.Write("Введите название мероприятия: ");
                     eventName = Console.ReadLine();
 
-                } while (string.IsNullOrEmpty(eventName));
+                } while (string.IsNullOrWhiteSpace(eventName));
 
                 string? eventPlace;
                 do
@@ -45,7 +45,7 @@ do
                     Console.Write("Введите место проведения: ");
                     eventPlace = Console.ReadLine();
 
-                } while (string.IsNullOrEmpty(eventPlace));
+                } while (string.IsNullOrWhiteSpace(eventPlace));
 
                 string? eventDate;
                 do
@@ -57,9 +57,8 @@ do
                 || Regex.IsMatch(eventDate, Validator.DATE_PATTERN) == false 
                 || Validator.IsDateCorrect(eventDate) == false);
 
-                Event evnt = new(eventName, eventPlace, eventDate);
-                calendar.AddEvent(evnt);
-                Console.WriteLine("Мероприятие добавлено\n");
+                calendar.AddEvent(eventName, eventPlace, eventDate);
+                Console.WriteLine("Мероприятие добавлено!\n");
                 break;
             }
         case 2:
@@ -90,7 +89,7 @@ do
             {
                 if (calendar.IsEmpty())
                 {
-                    Console.WriteLine("Календарь пуст\n");
+                    Console.WriteLine("Календарь пуст!\n");
                     break;
                 }
 
@@ -99,55 +98,55 @@ do
 
                 do
                 {
-                    Console.Write("Введите номер мероприятия для удаления: ");
+                    Console.Write("Введите номер мероприятия для редактирования: ");
                     optionRead = Console.ReadLine();
 
                 } while (!int.TryParse(optionRead, out eventNumber) ||
                     eventNumber < 1 ||
                     eventNumber > calendar.GetEventsCount());
 
-                string eventName;
+                string? eventName;
 
                 do
                 {
                     Console.Write("Введите новое название мероприятия: ");
                     eventName = Console.ReadLine();
 
-                } while (eventName == "");
+                } while (string.IsNullOrWhiteSpace(eventName));
 
-                string eventPlace;
+                string? eventPlace;
 
                 do
                 {
                     Console.Write("Введите новое место проведения: ");
                     eventPlace = Console.ReadLine();
 
-                } while (eventPlace == "");
+                } while (string.IsNullOrWhiteSpace(eventPlace));
 
-                string eventDate;
-                bool isEventDateValid;
+                string? eventDate;
                 do
                 {
-                    Console.Write("Введите новую дату проведения в формате d.m: ");
+                    Console.Write("Введите числами новую дату проведения в формате ДЕНЬ.МЕСЯЦ: ");
                     eventDate = Console.ReadLine();
-                    isEventDateValid = Regex.IsMatch(eventDate, Validator.DATE_PATTERN);
 
-                } while (!(isEventDateValid && Validator.IsDateCorrect(eventDate)));
+                } while (string.IsNullOrWhiteSpace(eventDate)
+                || Regex.IsMatch(eventDate, Validator.DATE_PATTERN) == false
+                || Validator.IsDateCorrect(eventDate) == false);
 
                 calendar.EditEvent(eventNumber, eventName, eventPlace, eventDate);
-                Console.WriteLine("Мероприятие изменено\n");
+                Console.WriteLine("Мероприятие изменено!\n");
                 break;
             }
         case 4:
             {
-                string eventName;
+                string? eventName;
 
                 do
                 {
                     Console.Write("Введите имя искомого мероприятия: ");
                     eventName = Console.ReadLine();
 
-                } while (eventName == "");
+                } while (string.IsNullOrWhiteSpace(eventName));
 
                 calendar.SearchEventByName(eventName);
                 break;
