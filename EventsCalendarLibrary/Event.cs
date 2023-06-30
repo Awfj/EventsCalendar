@@ -1,4 +1,4 @@
-﻿namespace LR1NN
+﻿namespace EventsCalendarLibrary
 {
     public class Event
     {

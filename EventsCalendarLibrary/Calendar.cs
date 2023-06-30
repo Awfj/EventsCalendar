@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace LR1NN
+namespace EventsCalendarLibrary
 {
     public class Calendar
     {
@@ -30,16 +30,6 @@ namespace LR1NN
         public void DeleteEvent(int eventNumber)
         {
             events.RemoveAt(eventNumber - 1);
-        }
-
-        public void CopyEvent(int eventNumber, int count)
-        {
-            Event evnt = new Event(events[eventNumber - 1]);
-
-            for (int i = 0; i < count; i++)
-            {
-                events.Add(new Event(evnt));
-            }
         }
 
         public bool IsEmpty()

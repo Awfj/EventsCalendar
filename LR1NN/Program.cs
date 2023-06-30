@@ -1,11 +1,11 @@
-﻿using LR1NN;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using EventsCalendarLibrary;
 
 Calendar calendar = new();
 int option;
 string? optionRead;
 
-Console.WriteLine("КАЛЕНДАРЬ МЕРОПРИЯТИЙ");
+Console.WriteLine("КАЛЕНДАРЬ МЕРОПРИЯТИЙ\n");
 
 do
 {
@@ -15,8 +15,7 @@ do
     Console.WriteLine("3 - Редактирование мероприятия");
     Console.WriteLine("4 - Поиск мероприятия");
     Console.WriteLine("5 - Просмотр мероприятий");
-    Console.WriteLine("6 - Копирование мероприятия");
-    Console.WriteLine("0 - Выйти");
+    Console.WriteLine("0 - Выйти\n");
 
     do
     {
@@ -30,6 +29,7 @@ do
     switch (option)
     {
         case 1:
+            // Добавление мероприятия
             {
                 string? eventName;
                 do
@@ -62,6 +62,7 @@ do
                 break;
             }
         case 2:
+            // Удаление мероприятия
             {
                 if (calendar.IsEmpty())
                 {
@@ -86,6 +87,7 @@ do
                 break;
             }
         case 3:
+            // Редактирование мероприятия
             {
                 if (calendar.IsEmpty())
                 {
@@ -138,6 +140,7 @@ do
                 break;
             }
         case 4:
+            // Поиск мероприятия
             {
                 string? eventName;
 
@@ -152,6 +155,7 @@ do
                 break;
             }
         case 5:
+            // Просмотр мероприятий
             {
                 if (calendar.IsEmpty())
                 {
@@ -160,40 +164,6 @@ do
                 }
 
                 ShowEvents();
-                break;
-            }
-        case 6:
-            {
-                if (calendar.IsEmpty())
-                {
-                    Console.WriteLine("Календарь пуст\n");
-                    break;
-                }
-
-                ShowEvents();
-                int eventNumber;
-                int copyAmount;
-
-                do
-                {
-                    Console.Write("Введите номер мероприятия для копирования: ");
-                    optionRead = Console.ReadLine();
-
-                } while (!int.TryParse(optionRead, out eventNumber) ||
-                    eventNumber < 1 ||
-                    eventNumber > calendar.GetEventsCount());
-
-                do
-                {
-                    Console.Write("Введите количество копий (не более 10): ");
-                    optionRead = Console.ReadLine();
-
-                } while (!int.TryParse(optionRead, out copyAmount) || 
-                    copyAmount < 1 || 
-                    copyAmount > 10);
-
-                calendar.CopyEvent(eventNumber, copyAmount);
-                Console.WriteLine("Мероприятие скопировано!\n");
                 break;
             }
     }
