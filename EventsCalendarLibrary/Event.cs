@@ -17,6 +17,14 @@
             Place = place;
             Date = date;
         }
+
+        public Event(Tuple<string, string, string> eventInfo)
+        {
+            Name = eventInfo.Item1;
+            Place = eventInfo.Item2;
+            Date = eventInfo.Item3;
+        }
+
         public Event(Event evnt)
         {
             Name = evnt.Name;

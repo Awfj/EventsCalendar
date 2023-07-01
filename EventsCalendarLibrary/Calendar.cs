@@ -19,12 +19,27 @@ namespace EventsCalendarLibrary
             SortEvents(events);
         }
 
+        public void AddEvent(Tuple<string, string, string> eventInfo)
+        {
+            Event evnt = new(eventInfo);
+            events.Add(evnt);
+            SortEvents(events);
+        }
+
         public void EditEvent(int eventNumber, string name, string place, string date)
         {
             Event evnt = events[eventNumber - 1];
             evnt.Name = name;
             evnt.Place = place;
             evnt.Date = date;
+        }
+
+        public void EditEvent(int eventNumber, Tuple<string, string, string> eventInfo)
+        {
+            Event evnt = events[eventNumber - 1];
+            evnt.Name = eventInfo.Item1;
+            evnt.Place = eventInfo.Item2;
+            evnt.Date = eventInfo.Item3;
         }
 
         public void DeleteEvent(int eventNumber)
