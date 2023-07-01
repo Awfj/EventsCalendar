@@ -22,49 +22,13 @@ namespace EventsCalendar
                 Console.Write($"{message}: ");
                 optionRead = Console.ReadLine();
 
-            } while (!int.TryParse(optionRead, out option) || option < min || option > max);
+            } while (!int.TryParse(optionRead, out option) 
+            || option < min 
+            || option > max);
+
             Console.Clear();
 
             return option;
-        }
-
-        /// <summary>
-        /// Ввод информации о мероприятии
-        /// </summary>
-        /// <returns></returns>
-        public static Tuple<string, string, string> InputEventInfo()
-        {
-            // Название
-            string? eventName;
-            do
-            {
-                Console.Write("Введите название мероприятия: ");
-                eventName = Console.ReadLine();
-
-            } while (string.IsNullOrWhiteSpace(eventName));
-
-            // Место проведения
-            string? eventPlace;
-            do
-            {
-                Console.Write("Введите место проведения: ");
-                eventPlace = Console.ReadLine();
-
-            } while (string.IsNullOrWhiteSpace(eventPlace));
-
-            // Дата проведения
-            string? eventDate;
-            do
-            {
-                // Дата правильна, если она не раньше текущей и не позже 2100 года
-                Console.Write("Введите числами дату проведения в формате МЕСЯЦ ДЕНЬ ГОД: ");
-                eventDate = Console.ReadLine();
-            }
-            while ((DateTime.TryParse(eventDate, out DateTime date)
-            && date >= DateTime.Today
-            && date.Year < 2100) == false);
-
-            return Tuple.Create(eventName, eventPlace, eventDate);
         }
 
         /// <summary>
@@ -104,30 +68,6 @@ namespace EventsCalendar
         }
 
         /// <summary>
-        /// Ввод номера мероприятия
-        /// </summary>
-        /// <param name="calendar"></param>
-        /// <returns></returns>
-        public static int InputEventNumber(Calendar calendar)
-        {
-            ShowEvents(calendar);
-
-            int eventNumber;
-            string? optionRead;
-
-            do
-            {
-                Console.Write("Введите номер мероприятия: ");
-                optionRead = Console.ReadLine();
-
-            } while (!int.TryParse(optionRead, out eventNumber) ||
-                    eventNumber < 1 ||
-                    eventNumber > calendar.GetEventsCount());
-
-            return eventNumber;
-        }
-
-        /// <summary>
         /// Поиск мероприятия по названию
         /// </summary>
         /// <param name="calendar"></param>
@@ -146,12 +86,87 @@ namespace EventsCalendar
         }
 
         /// <summary>
+        /// Вывод информации о мероприятиях с проверкой на пустоту календаря
+        /// </summary>
+        /// <param name="calendar"></param>
+        public static void DisplayEventsWithEmptinessCheck(Calendar calendar)
+        {
+            if (IsCalendarEmpty(calendar)) return;
+            DisplayEvents(calendar);
+        }
+
+        /// <summary>
         /// Вывод информации о мероприятиях
         /// </summary>
         /// <param name="calendar"></param>
-        public static void ShowEvents(Calendar calendar)
+        private static void DisplayEvents(Calendar calendar)
         {
             Console.WriteLine(calendar.GetEventsInfo());
+        }
+
+        /// <summary>
+        /// Ввод информации о мероприятии
+        /// </summary>
+        /// <returns></returns>
+        private static Tuple<string, string, string> InputEventInfo()
+        {
+            // Название
+            string? eventName;
+            do
+            {
+                Console.Write("Введите название мероприятия: ");
+                eventName = Console.ReadLine();
+
+            } while (string.IsNullOrWhiteSpace(eventName));
+
+            // Место проведения
+            string? eventPlace;
+            do
+            {
+                Console.Write("Введите место проведения: ");
+                eventPlace = Console.ReadLine();
+
+            } while (string.IsNullOrWhiteSpace(eventPlace));
+
+            // Дата проведения
+            string? eventDate;
+            DateTime date;
+
+            do
+            {
+                // Дата правильна, если она не раньше текущей и не позже 2100 года
+                Console.Write("Введите числами дату проведения в формате МЕСЯЦ ДЕНЬ ГОД: ");
+                eventDate = Console.ReadLine();
+            }
+            while ((DateTime.TryParse(eventDate, out date)
+            && date >= DateTime.Today
+            && date.Year < 2100) == false);
+
+            return Tuple.Create(eventName, eventPlace, $"{date.Month}/{date.Day}/{date.Year}");
+        }
+
+        /// <summary>
+        /// Ввод номера мероприятия
+        /// </summary>
+        /// <param name="calendar"></param>
+        /// <returns></returns>
+        private static int InputEventNumber(Calendar calendar)
+        {
+            DisplayEvents(calendar);
+
+            int eventNumber;
+            string? optionRead;
+
+            do
+            {
+                Console.Write("Введите номер мероприятия: ");
+                optionRead = Console.ReadLine();
+
+            } while (!int.TryParse(optionRead, out eventNumber) ||
+                    eventNumber < 1 ||
+                    eventNumber > calendar.GetEventsCount());
+
+            return eventNumber;
         }
 
         /// <summary>
@@ -159,7 +174,7 @@ namespace EventsCalendar
         /// </summary>
         /// <param name="calendar"></param>
         /// <returns></returns>
-        public static bool IsCalendarEmpty(Calendar calendar)
+        private static bool IsCalendarEmpty(Calendar calendar)
         {
             if (calendar.IsEmpty())
             {

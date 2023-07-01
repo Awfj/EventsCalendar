@@ -38,16 +38,8 @@ do
             break;
         case 5:
             // Просмотр мероприятий
-            {
-                if (calendar.IsEmpty())
-                {
-                    Console.WriteLine("Календарь пуст\n");
-                    break;
-                }
-
-                //Misc.ShowEvents(calendar);
-                break;
-            }
+            Misc.DisplayEventsWithEmptinessCheck(calendar);
+            break;
     }
 } while (option != 0);
 
